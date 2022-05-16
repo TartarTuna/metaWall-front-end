@@ -1,0 +1,11 @@
+.shadow {
+  &-black {
+    box-shadow: -1.5px 1.5px 0px 1px $black;
+  }
+  &-gray {
+    box-shadow: -8px 8px 0px #00040029;
+  }
+  &-pushcard {
+    box-shadow: 0px 3px 0px 0px $black;
+  }
+}

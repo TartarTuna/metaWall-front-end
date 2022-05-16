@@ -1,0 +1,69 @@
+.logo {
+  background: url('../img/logo.png') center no-repeat;
+  width: 296px;
+  height: 84px;
+  text-indent: 101%;
+  background-size: contain;
+}
+.cardDashBoard::after {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 8%;
+  left: -7px;
+  border: 2px solid #000;
+  background-color: #fff;
+  border-radius: 8px;
+  z-index: -1;
+}
+
+.titleDashBoard::after {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 10%;
+  left: -7px;
+  border: 2px solid #000;
+  background-color: #fff;
+  z-index: -1;
+}
+
+//talk
+.bar::-webkit-scrollbar {
+  width: 12px;
+}
+.bar::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  background-color: #eec32a;
+}
+.textLeft::before {
+  content: '';
+  width: 0;
+  height: 0;
+  left: 0%;
+  top: 10%;
+  transform: translateX(-100%);
+  position: absolute;
+  border-top: 7px solid transparent;
+  border-right: 7px solid #eec32a;
+  border-bottom: 7px solid transparent;
+  border-left: 7px solid transparent;
+}
+.textRight::before {
+  content: '';
+  width: 0;
+  height: 0;
+  right: 0%;
+  top: 10%;
+  transform: translateX(100%);
+  position: absolute;
+  border-top: 7px solid transparent;
+  border-right: 7px solid transparent;
+  border-bottom: 7px solid transparent;
+  border-left: 7px solid #eec32a;
+}
+.textBg {
+  background-color: #eec32a;
+}

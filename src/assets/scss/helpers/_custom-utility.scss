@@ -1,0 +1,11 @@
+.border8px {
+  border-radius: 8px;
+}
+body {
+  font-family: 'Noto Sans TC', sans-serif;
+}
+
+.borderFix8px {
+  border-top-left-radius: 10px !important;
+  border-top-right-radius: 10px !important;
+}
