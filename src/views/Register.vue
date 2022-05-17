@@ -123,10 +123,9 @@ const submitForm = handleSubmit(async (values, actions) => {
     await signUpApi(values)
     router.push('/')
   } catch (err) {
-    console.log(err)
-    const emailExist = err.response.data.message
+    const emailExist = err.response.data.message.includes('Email')
     if (emailExist) {
-      actions.setFieldError('email', emailExist)
+      actions.setFieldError('email', err.response.data.message)
     }
     loading.value = false
   }
