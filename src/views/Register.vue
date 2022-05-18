@@ -88,6 +88,7 @@ import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { signUpApi } from '@/apis/user.js'
 import { useField, useForm } from 'vee-validate'
+import { setCookieToke, clearUserInfo } from '@/compatibles/method'
 import * as yup from 'yup'
 import Banner from '@/components/Banner.vue'
 const loading = ref(false)
@@ -120,14 +121,17 @@ const { value: password } = useField('password')
 const submitForm = handleSubmit(async (values, actions) => {
   try {
     loading.value = true
-    await signUpApi(values)
-    router.push('/')
+    const { user } = await signUpApi(values)
+    setCookieToke(user.token)
+    router.push({ name: 'wall' })
   } catch (err) {
-    const emailExist = err.response.data.message.includes('Email')
+    const emailExist = err.message.includes('Email')
     if (emailExist) {
-      actions.setFieldError('email', err.response.data.message)
+      actions.setFieldError('email', err.message)
     }
     loading.value = false
   }
 })
+
+clearUserInfo()
 </script>
