@@ -1,4 +1,3 @@
-/* eslint-disable prettier/prettier */
 <template>
   <section
     class="container vh-100 d-flex justify-content-center align-items-center"
@@ -98,13 +97,13 @@
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { signInApi, facebookSignInApi, googleSignInApi } from '@/apis/user.js'
+import { setCookieToke, clearUserInfo } from '@/compatibles/method'
 import Banner from '@/components/Banner.vue'
 
 const router = useRouter()
 const loading = ref(false)
 const email = ref('')
 const password = ref('')
-const token = ref('')
 const errorMsg = ref('')
 
 const loginSubmit = async () => {
@@ -113,16 +112,16 @@ const loginSubmit = async () => {
   } else {
     try {
       loading.value = true
-      const { data } = await signInApi({
+      const { user } = await signInApi({
         email: email.value,
         password: password.value
       })
       errorMsg.value = ''
-      token.value = data.user.token
-      document.cookie = `wallToken=${token.value};`
+      setCookieToke(user.token)
       router.push({ name: 'wall' })
     } catch (err) {
-      errorMsg.value = err.response.data.message
+      console.log(err)
+      errorMsg.value = err.message
     } finally {
       loading.value = false
       email.value = ''
@@ -138,4 +137,6 @@ const facebookLogin = async () => {
 const googleLogin = async () => {
   await googleSignInApi()
 }
+
+clearUserInfo()
 </script>

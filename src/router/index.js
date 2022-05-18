@@ -1,4 +1,5 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
+import guard from './navigation-guard'
 
 const routes = [
   {
@@ -39,7 +40,8 @@ const routes = [
   {
     path: '/profile',
     name: 'profile',
-    component: () => import('@/views/Profile.vue')
+    component: () => import('@/views/Profile.vue'),
+    beforeEnter: guard.beforeEnter.checkAuth
   }
 ]
 const router = createRouter({
