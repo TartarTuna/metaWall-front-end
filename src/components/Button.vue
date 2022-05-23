@@ -8,10 +8,10 @@ const props = defineProps({
 </script>
 
 <template>
-  <button class="btn border-dark border-2 fw-bold">
+  <button class="btn border-dark border-2 fw-bold" :disabled="props.loading">
     <slot></slot>
     <span
-      :class="props.loading ? 'spinner-border spinner-border-sm' : 'none'"
+      :class="loading ? 'spinner-border spinner-border-sm' : 'none'"
       role="status"
       aria-hidden="true"
     ></span>

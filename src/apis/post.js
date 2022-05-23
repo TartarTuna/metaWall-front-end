@@ -6,3 +6,19 @@ import axios from '@/plugins/axios'
  * @returns {promise}
  */
 export const getPosts = (params) => axios.get('/posts', { params })
+
+/**
+ * 編輯貼文
+ * @param {string} postId 貼文編號
+ * @param {object} payload 編輯資訊
+ * @returns {promise}
+ */
+export const patchPost = (postId, payload) =>
+  axios.patch(`/posts/${postId}`, payload)
+
+/**
+ *刪除貼文
+ * @param {string} postId 貼文編號
+ * @returns {promise}
+ */
+export const deletePost = (postId) => axios.delete(`/posts/${postId}`)

@@ -22,6 +22,10 @@
               @post-like="postLikeHandler"
               @delete-like="deleteLikeHandler"
               @post-comment="postCommentHandler"
+              @edit-comment="editCommentHandler"
+              @delete-comment="deleteCommentHandler"
+              @edit-post="editPostHandler"
+              @delete-post="deletePostHandler"
             />
           </ul>
           <EmptyPostCard v-else />
@@ -116,6 +120,48 @@ const deleteLikeHandler = (postId) => {
 const postCommentHandler = ({ postId, comment }) => {
   const post = posts.value.find((item) => item._id === postId)
   post.comments.push(comment)
+}
+/**
+ * 編輯貼文留言
+ * @param {string} postId 貼文編號
+ * @param {string} commentId 留言編號
+ * @param {string} content 內容
+ */
+const editCommentHandler = ({ postId, commentId, content }) => {
+  const post = posts.value.find((item) => item._id === postId)
+  const comment = post.comments.find((item) => item._id === commentId)
+  comment.content = content
+}
+/**
+ * 刪除貼文留言
+ * @param {string} postId 貼文編號
+ * @param {string} commentId 留言編號
+ */
+const deleteCommentHandler = ({ postId, commentId }) => {
+  const post = posts.value.find((item) => item._id === postId)
+  const index = post.comments.findIndex((item) => item._id === commentId)
+  if (~index) post.comments.splice(index, 1)
+}
+/**
+ * 編輯貼文
+ * @param {string} postId 貼文編號
+ * @param {string} content 內容
+ * @param {string} image 圖片
+ * @param {array} tag 標籤
+ */
+const editPostHandler = ({ postId, content, image, tag }) => {
+  const post = posts.value.find((item) => item._id === postId)
+  post.content = content
+  post.tag = tag
+  post.image = image
+}
+/**
+ * 刪除貼文
+ * @param {string} postId 貼文編號
+ */
+const deletePostHandler = (postId) => {
+  const index = posts.value.findIndex((item) => item._id === postId)
+  if (~index) posts.value.splice(index, 1)
 }
 
 setPosts()
