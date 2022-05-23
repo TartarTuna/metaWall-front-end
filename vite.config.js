@@ -12,6 +12,9 @@ export default ({ mode }) => {
         '@/': `${path.resolve(__dirname, 'src')}/`,
         '~/': `${path.resolve(__dirname, 'node_modules')}/`
       }
+    },
+    server: {
+      host: '0.0.0.0'
     }
   })
 }

@@ -8,6 +8,13 @@ import axios from '@/plugins/axios'
 export const getPosts = (params) => axios.get('/posts', { params })
 
 /**
+ * 新增貼文
+ * @param {object} payload 貼文內容
+ * @returns {promise}
+ */
+export const addPost = (payload) => axios.post('/posts', payload)
+
+/**
  * 編輯貼文
  * @param {string} postId 貼文編號
  * @param {object} payload 編輯資訊
