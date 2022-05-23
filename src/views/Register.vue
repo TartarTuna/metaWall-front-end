@@ -121,8 +121,8 @@ const { value: password } = useField('password')
 const submitForm = handleSubmit(async (values, actions) => {
   try {
     loading.value = true
-    const { user } = await signUpApi(values)
-    setCookieToke(user.token)
+    const { data } = await signUpApi(values)
+    setCookieToke(data.token)
     router.push({ name: 'wall' })
   } catch (err) {
     const emailExist = err.message.includes('Email')

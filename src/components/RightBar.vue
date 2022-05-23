@@ -17,14 +17,10 @@
               <div
                 class="col-3 d-flex justify-content-center align-self-center"
               >
-                <img
-                  class="d-block mx-auto"
-                  src="@/assets/img/user1.png"
-                  alt="user1"
-                />
+                <img class="d-block mx-auto" :src="user.photo" alt="user1" />
               </div>
               <div class="col-9">
-                <p class="m-0 ms-xl-n3 fw-bold">邊緣小杰</p>
+                <p class="m-0 ms-xl-n3 fw-bold">{{ user.name }}</p>
               </div>
             </div>
           </router-link>
@@ -209,3 +205,7 @@
     </section>
   </div>
 </template>
+
+<script setup>
+import { user } from '@/compatibles/data'
+</script>

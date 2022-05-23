@@ -8,7 +8,7 @@
         <router-link to="Wall" class="navbar-brand fs-1">MetaWall</router-link>
       </h1>
       <section class="d-flex align-items-center navDropdown">
-        <img src="@/assets/img/user1.png" alt="user1" class="me-2 img-fluid" />
+        <img :src="user.photo" alt="user1" class="me-2 img-fluid" />
         <div class="d-inline bg-white me-2 position-relative">
           <div
             class="btn btn-white border-0 fw-bolder inderline position-relative dropstart"
@@ -18,7 +18,7 @@
             data-bs-display="static"
             aria-expanded="false"
           >
-            Member
+            {{ user.name }}
           </div>
           <ul
             class="dropdown-menu py-0 bg-white afterDashBoard navDropdown-content"
@@ -52,3 +52,7 @@
     </div>
   </nav>
 </template>
+
+<script setup>
+import { user } from '@/compatibles/data'
+</script>
