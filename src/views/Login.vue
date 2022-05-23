@@ -112,12 +112,12 @@ const loginSubmit = async () => {
   } else {
     try {
       loading.value = true
-      const { user } = await signInApi({
+      const { data } = await signInApi({
         email: email.value,
         password: password.value
       })
       errorMsg.value = ''
-      setCookieToke(user.token)
+      setCookieToke(data.token)
       router.push({ name: 'wall' })
     } catch (err) {
       console.log(err)
