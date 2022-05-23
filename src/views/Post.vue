@@ -166,7 +166,7 @@ const addNewPost = async () => {
       link = await uploadImg()
     }
     const payload = { content: postContent.value }
-    if (link) payload.photo = link
+    if (link) payload.image = link
 
     await addPost(payload)
     alert('新增成功')
