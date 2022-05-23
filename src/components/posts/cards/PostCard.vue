@@ -20,51 +20,11 @@
           v-if="isMe"
           src="@/assets/img/trash.png"
           class="d-block m-auto mx-2"
-          alt=""
+          @click="deletePostHandler"
         />
       </div>
     </div>
-    <form v-if="isEditing" @submit.prevent>
-      <div class="form-group mb-3">
-        <label for="content fw-bold">修改貼文內容</label>
-        <textarea
-          class="form-control border border-dark border-2"
-          type="text"
-          id="content"
-          rows="5"
-          placeholder="輸入您的貼文內容"
-        ></textarea>
-      </div>
-      <div class="form-group mb-3">
-        <label for="content fw-bold">修改tag</label>
-        <textarea
-          class="form-control border border-dark border-2"
-          type="text"
-          id="content"
-          rows="5"
-          placeholder="修改tag"
-        ></textarea>
-      </div>
-      <div class="input-group mb-3">
-        <input type="text" style="display: none" placeholder="上傳圖片" />
-        <button class="btn btn-dark border" style="border-radius: 8px">
-          上傳圖片
-        </button>
-      </div>
-      <img
-        src="@/assets/img/photo1.png"
-        alt="photo1"
-        class="w-100 img-fluid mb-2"
-      />
-      <div class="d-grid gap-2 col-2 ms-auto mt-5">
-        <button
-          type="submit"
-          class="btn btn-primary border border-dark border-2 fw-bold py-2 border8px"
-        >
-          OK
-        </button>
-      </div>
-    </form>
+    <EditPostForm v-if="isEditing" :post="post" @edit-post="editPost" />
     <template v-else>
       <p class="fw-bold">{{ post.content }}</p>
       <!-- ---tag--- -->
@@ -138,6 +98,8 @@
             :key="item._id"
             :post-id="post._id"
             :comment="item"
+            @delete-comment="deleteComment"
+            @edit-comment="editComment"
           />
         </ul>
       </section>
@@ -150,7 +112,9 @@ import { ref, toRefs, computed } from 'vue'
 import { user } from '@/compatibles/data'
 import { patchLike, patchUnlike } from '@/apis/like'
 import { postComment } from '@/apis/comment'
+import { deletePost } from '@/apis/post'
 import { dayFormat } from '@/plugins/day'
+import EditPostForm from '@/components/posts/forms/EditPostForm.vue'
 import CommentItem from '@/components/posts/CommentItem.vue'
 
 const props = defineProps({
@@ -164,7 +128,15 @@ const loading = ref(false)
 const isEditing = ref(false)
 const comment = ref('')
 const { post } = toRefs(props)
-const emit = defineEmits(['post-like', 'delete-like', 'post-comment'])
+const emit = defineEmits([
+  'post-like',
+  'delete-like',
+  'post-comment',
+  'delete-comment',
+  'edit-comment',
+  'edit-post',
+  'delete-post'
+])
 const isMe = computed(() => {
   return user.value._id === post.value.user._id
 })
@@ -224,6 +196,46 @@ const commentHandler = async () => {
     alert(e.message)
   } finally {
     loading.value = false
+  }
+}
+/**
+ * 刪除貼文留言
+ * @param {string} commentId 留言編號
+ */
+const deleteComment = (commentId) => {
+  emit('delete-comment', {
+    postId: post.value._id,
+    commentId
+  })
+}
+/**
+ * 編輯貼文留言
+ * @param {object} data 留言資訊
+ */
+const editComment = (data) => {
+  emit('edit-comment', {
+    postId: post.value._id,
+    ...data
+  })
+}
+/**
+ * 編輯貼文
+ * @param {object} data 編輯的貼文資訊
+ */
+const editPost = (data) => {
+  emit('edit-post', { postId: post.value._id, ...data })
+  isEditing.value = false
+}
+/**
+ * 刪除貼文事件
+ */
+const deletePostHandler = () => {
+  if (!confirm('確定要刪除這則貼文嗎？')) return
+  try {
+    deletePost(post.value._id)
+    emit('delete-post', post.value._id)
+  } catch (e) {
+    alert(e.message)
   }
 }
 </script>

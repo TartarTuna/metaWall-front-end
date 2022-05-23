@@ -15,7 +15,11 @@
           alt=""
           @click="isEditing = !isEditing"
         />
-        <img src="@/assets/img/trash.png" class="d-block m-auto mx-2" alt="" />
+        <img
+          src="@/assets/img/trash.png"
+          class="d-block m-auto mx-2"
+          @click="deleteCommentHandler"
+        />
       </div>
     </div>
     <div v-if="isEditing" class="input-group mb-3">
@@ -27,8 +31,13 @@
         aria-label="Recipient's username"
         aria-describedby="button-addon2"
       />
-      <Button :load="loading" class="btn btn-primary rounded-0" type="button">
-        OK
+      <Button
+        :load="loading"
+        class="btn btn-primary rounded-0"
+        type="button"
+        @click="editCommentHandler"
+      >
+        儲存
       </Button>
     </div>
     <p v-else class="m-0 fw-bold">{{ comment.content }}</p>
@@ -36,10 +45,10 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 import { dayFormat } from '@/plugins/day'
 import { user } from '@/compatibles/data'
-import { deleteComment } from '@/apis/comment'
+import { deleteComment, patchComment } from '@/apis/comment'
 
 const props = defineProps({
   postId: {
@@ -54,14 +63,46 @@ const props = defineProps({
 const loading = ref(false)
 const isEditing = ref(false)
 const inputComment = ref('')
+const emit = defineEmits(['delete-comment', 'edit-comment'])
 
-inputComment.value = props.comment.content
-
+/**
+ * 刪除留言事件
+ */
 const deleteCommentHandler = async () => {
+  if (!confirm('您確定刪除這則留言嗎？')) return
   try {
     deleteComment(props.postId, props.comment._id)
+    emit('delete-comment', props.comment._id)
   } catch (e) {
     alert(e.message)
   }
 }
+/**
+ * 編輯留言事件
+ */
+const editCommentHandler = async () => {
+  try {
+    loading.value = true
+    await patchComment({
+      postId: props.postId,
+      commentId: props.comment._id,
+      content: inputComment.value
+    })
+    isEditing.value = false
+    emit('edit-comment', {
+      commentId: props.comment._id,
+      content: inputComment.value
+    })
+  } catch (e) {
+    alert(e.message)
+  } finally {
+    loading.value = false
+  }
+}
+
+watch(isEditing, (status) => {
+  if (status) {
+    inputComment.value = props.comment.content
+  }
+})
 </script>
