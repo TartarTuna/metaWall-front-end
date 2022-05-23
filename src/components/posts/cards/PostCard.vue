@@ -1,7 +1,12 @@
 <template>
   <li class="card h-100 py-4 px-4 mb-3 border-2 shadow-pushcard border8px">
     <div class="d-flex align-items-center mb-3">
-      <img class="me-3 img-fluid" :src="post.user.photo" alt="user1" />
+      <img
+        width="45"
+        class="me-3 img-fluid"
+        :src="correctImageUrl(post.user.photo)"
+        alt="user1"
+      />
       <div class="d-flex flex-column mt-2">
         <router-link to="personal" class="mb-0 fw-bold">{{
           post.user.name
@@ -35,7 +40,7 @@
       </div>
       <img
         v-if="post.image"
-        :src="post.image"
+        :src="correctImageUrl(post.image)"
         alt="post image"
         class="img-fluid"
       />
@@ -56,7 +61,12 @@
     </div>
     <!-- -add--message--- -->
     <div class="d-flex mt-3">
-      <img :src="user.photo" alt="usr1" class="img-fluid me-1" />
+      <img
+        width="40"
+        :src="correctImageUrl(user.photo)"
+        alt="usr1"
+        class="img-fluid me-1"
+      />
       <div class="input-group">
         <input
           v-model="comment"
@@ -110,6 +120,7 @@
 <script setup>
 import { ref, toRefs, computed } from 'vue'
 import { user } from '@/compatibles/data'
+import { correctImageUrl } from '@/compatibles/image-url'
 import { patchLike, patchUnlike } from '@/apis/like'
 import { postComment } from '@/apis/comment'
 import { deletePost } from '@/apis/post'

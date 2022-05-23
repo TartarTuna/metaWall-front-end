@@ -8,7 +8,12 @@
         <router-link to="Wall" class="navbar-brand fs-1">MetaWall</router-link>
       </h1>
       <section class="d-flex align-items-center navDropdown">
-        <img :src="user.photo" alt="user1" class="me-2 img-fluid" />
+        <img
+          width="30"
+          :src="correctImageUrl(user.photo)"
+          alt="user1"
+          class="me-2 img-fluid"
+        />
         <div class="d-inline bg-white me-2 position-relative">
           <div
             class="btn btn-white border-0 fw-bolder inderline position-relative dropstart"
@@ -55,4 +60,5 @@
 
 <script setup>
 import { user } from '@/compatibles/data'
+import { correctImageUrl } from '@/compatibles/image-url'
 </script>

@@ -1,7 +1,12 @@
 <template>
   <li class="card h-100 p-3 border-0 rounded-3 mt-3 bg-gray-light">
     <div class="d-flex align-items-center mb-2">
-      <img class="me-3 img-fluid" :src="comment.user.photo" alt="user2" />
+      <img
+        width="40"
+        class="me-3 img-fluid"
+        :src="correctImageUrl(comment.user.photo)"
+        alt="user2"
+      />
       <div class="d-flex flex-column mt-2">
         <router-link to="personal" class="mb-0 fw-bold">{{
           comment.user.name
@@ -48,6 +53,7 @@
 import { ref, watch } from 'vue'
 import { dayFormat } from '@/plugins/day'
 import { user } from '@/compatibles/data'
+import { correctImageUrl } from '@/compatibles/image-url'
 import { deleteComment, patchComment } from '@/apis/comment'
 
 const props = defineProps({
