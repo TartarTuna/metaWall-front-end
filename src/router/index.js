@@ -15,7 +15,8 @@ const routes = [
   {
     path: '/wall',
     name: 'wall',
-    component: () => import('@/views/Wall.vue')
+    component: () => import('@/views/Wall.vue'),
+    beforeEnter: guard.beforeEnter.checkAuth
   },
   {
     path: '/personal',

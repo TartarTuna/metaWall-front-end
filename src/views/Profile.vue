@@ -12,37 +12,20 @@
           <div class="card-header bg-white border-0">
             <ul class="nav nav-tabs card-header-tabs" id="myTab" role="tablist">
               <li
-                class="nav-item border border-dark border-2 border-bottom-0 rounded"
-                role="presentation"
-              >
-                <button
-                  class="nav-link nav-tabs active px-4"
-                  id="name-edit-tab"
-                  data-bs-toggle="tab"
-                  data-bs-target="#name-edit"
-                  type="button"
-                  role="tab"
-                  aria-controls="home"
-                  aria-selected="true"
-                >
-                  暱稱修改
-                </button>
-              </li>
-              <li
+                v-for="item in tabs"
+                :key="item.id"
                 class="nav-item border border-dark border-2 border-bottom-0 rounded"
                 role="presentation"
               >
                 <button
                   class="nav-link nav-tabs px-4"
-                  id="profile-tab"
+                  :class="{ active: item.id === tab }"
                   data-bs-toggle="tab"
-                  data-bs-target="#profile"
+                  :data-bs-target="`#${item.id}`"
                   type="button"
                   role="tab"
-                  aria-controls="profile"
-                  aria-selected="false"
                 >
-                  重設密碼
+                  {{ item.title }}
                 </button>
               </li>
             </ul>
@@ -60,10 +43,10 @@
             >
               <div class="card-body px-10 py-5">
                 <section class="row d-flex justify-content-center">
-                  <form class="row px-lg-5 g-3">
+                  <form class="row px-lg-5 g-3" @submit.prevent>
                     <div>
                       <img
-                        src="@/assets/img/user.png"
+                        :src="nicknameForm.photo"
                         alt="user"
                         class="img-fluid w-25 mx-auto mb-4 d-block"
                       />
@@ -71,7 +54,12 @@
                     <div class="col-12 d-flex justify-content-center">
                       <div class="w-100">
                         <label class="form-label fw-bold">上傳大頭照</label>
-                        <input type="file" class="form-control" />
+                        <input
+                          ref="inputFile"
+                          type="file"
+                          class="form-control"
+                          @change="changePhotoHandler"
+                        />
                       </div>
                     </div>
                     <div class="col-12">
@@ -79,6 +67,7 @@
                         >暱稱</label
                       >
                       <input
+                        v-model="nicknameForm.name"
                         type="text"
                         class="form-control border-dark border-2 p-2 ps-3"
                         id="userphoto"
@@ -86,37 +75,41 @@
                       />
                     </div>
                     <div class="col-12 mb-3 d-flex">
-                      <div class="form-check me-3">
+                      <div
+                        v-for="item in genders"
+                        :key="item.id"
+                        class="form-check me-3"
+                      >
                         <input
+                          v-model="nicknameForm.gender"
                           class="form-check-input"
-                          type="checkbox"
-                          value=""
-                          id="invalidCheck"
+                          type="radio"
+                          name="gender"
+                          :id="item.id"
+                          :value="item.id"
+                          :checked="nicknameForm.gender === item.id"
                         />
-                        <label class="form-check-label" for="invalidCheck">
-                          男性
-                        </label>
-                      </div>
-                      <div class="form-check">
-                        <input
-                          class="form-check-input"
-                          type="checkbox"
-                          value=""
-                          id="invalidCheck"
-                        />
-                        <label class="form-check-label" for="invalidCheck">
-                          女性
+                        <label class="form-check-label" :for="item.id">
+                          {{ item.title }}
                         </label>
                       </div>
                     </div>
+                    <div
+                      v-if="nicknameError"
+                      class="my-0 text-center fs-7 text-danger"
+                    >
+                      {{ nicknameError }}
+                    </div>
                     <!-- 1.圖片寬高比必需為 1:1，請重新輸入 2. 解析度寬度至少 300像素以上，請重新輸入 -->
                     <div class="d-grid">
-                      <button
+                      <Button
                         class="btn btn-primary btn btn-primary border border-dark border-2 shadow-black border8px py-3 fw-bold"
                         type="submit"
+                        :loading="loading"
+                        @click="submitProfileHandler"
                       >
                         送出更新
-                      </button>
+                      </Button>
                     </div>
                   </form>
                 </section>
@@ -131,13 +124,14 @@
             >
               <div class="card-body px-10 py-5">
                 <section class="row d-flex justify-content-center">
-                  <form class="row px-lg-5 g-3">
+                  <form class="row px-lg-5 g-3" @submit.prevent>
                     <div class="col-12">
                       <label for="userpPassword" class="form-label fw-bold"
                         >新密碼</label
                       >
                       <input
-                        type="text"
+                        v-model="passwordForm.password"
+                        type="password"
                         class="form-control border-dark border-2 p-2 ps-3"
                         id="userpPassword"
                         placeholder="新密碼"
@@ -148,19 +142,28 @@
                         >再次輸入</label
                       >
                       <input
-                        type="text"
+                        v-model="passwordForm.confirmPassword"
+                        type="password"
                         class="form-control border-dark border-2 p-2 ps-3"
                         id="userpPassword1"
                         placeholder="再次輸入"
                       />
                     </div>
+                    <div
+                      v-if="passwordError"
+                      class="my-0 text-center fs-7 text-danger"
+                    >
+                      {{ passwordError }}
+                    </div>
                     <div class="d-grid">
-                      <button
+                      <Button
+                        :loading="loading"
                         class="btn btn-primary btn btn-primary border border-dark border-2 shadow-black border8px py-3 fw-bold"
                         type="submit"
+                        @click="submitPasswordHandler"
                       >
                         送出更新
-                      </button>
+                      </Button>
                     </div>
                   </form>
                 </section>
@@ -178,7 +181,120 @@
 </template>
 
 <script setup>
-import Navbar from '@/components/Navbar.vue'
-import RightBar from '@/components/RightBar.vue'
-import PhoneMenu from '@/components/PhoneMenu.vue'
+import { ref } from 'vue'
+import { user } from '@/compatibles/data'
+import { patchUserProfile, patchUserPassword } from '@/apis/user'
+import { postImage } from '@/apis/image'
+
+const loading = ref(false)
+const tab = ref('name-edit')
+const nicknameError = ref('')
+const passwordError = ref('')
+const tabs = [
+  { id: 'name-edit', title: '暱稱修改' },
+  { id: 'profile', title: '重設密碼' }
+]
+const genders = [
+  { id: 'male', title: '男性' },
+  { id: 'female', title: '女性' }
+]
+const nicknameForm = ref({
+  photo: '',
+  name: '',
+  gender: 'male',
+  photoFile: null
+})
+const passwordForm = ref({
+  password: '',
+  confirmPassword: ''
+})
+const inputFile = ref(null)
+
+nicknameForm.value.photo = user.value.photo
+nicknameForm.value.name = user.value.name
+nicknameForm.value.gender = user.value.gender
+
+/**
+ * 變更大頭照事件
+ * @param {file} e file instance
+ */
+const changePhotoHandler = (e) => {
+  const file = e.target.files.item(0)
+  nicknameError.value = ''
+  if (!['image/jpeg', 'image/png'].includes(file.type)) {
+    nicknameError.value = '檔案格式錯誤，僅限上傳 jpg、jpeg 與 png 格式'
+    inputFile.value.value = ''
+    return
+  }
+  const reader = new FileReader()
+  reader.readAsDataURL(file)
+  reader.onload = () => {
+    nicknameForm.value.photo = reader.result
+    nicknameForm.value.photoFile = file
+  }
+}
+/**
+ * 上傳會員頭像
+ * @returns {promise} 圖片網址
+ */
+const uploadPhoto = async () => {
+  try {
+    const formData = new FormData()
+    formData.append('image', nicknameForm.value.photoFile)
+    const {
+      data: { imageUrl = '' }
+    } = await postImage(formData)
+    return imageUrl
+  } catch (e) {
+    return Promise.reject(e)
+  }
+}
+/**
+ * 送出修改的會員資訊
+ */
+const submitProfileHandler = async () => {
+  loading.value = true
+  nicknameError.value = ''
+  try {
+    let link = ''
+    if (nicknameForm.value.photoFile) {
+      link = await uploadPhoto()
+    }
+    const { name, gender } = nicknameForm.value
+    const payload = { name, gender }
+    if (link) payload.photo = link
+
+    await patchUserProfile(payload)
+    alert('更新成功')
+    if (link) user.value.photo = link
+    user.value.name = name
+    user.value.gender = gender
+    nicknameError.value = ''
+    inputFile.value.value = ''
+    nicknameForm.value.photoFile = null
+  } catch (e) {
+    nicknameError.value = e.message
+  } finally {
+    loading.value = false
+  }
+}
+/**
+ * 送出修改的會員密碼
+ */
+const submitPasswordHandler = async () => {
+  loading.value = true
+  passwordError.value = ''
+  try {
+    const { password, confirmPassword } = passwordForm.value
+    await patchUserPassword({ password, confirmPassword })
+    alert('更新成功')
+    passwordError.value = ''
+    passwordForm.value.password = ''
+    passwordForm.value.confirmPassword = ''
+  } catch (e) {
+    passwordError.value = e.message
+  } finally {
+    loading.value = false
+  }
+}
 </script>

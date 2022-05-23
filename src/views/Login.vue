@@ -96,7 +96,8 @@
 <script setup>
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
-import { signInApi, facebookSignInApi, googleSignInApi } from '@/apis/user.js'
+import { signInApi } from '@/apis/user'
+import { facebookSignInApi, googleSignInApi } from '@/apis/auth'
 import { setCookieToke, clearUserInfo } from '@/compatibles/method'
 import Banner from '@/components/Banner.vue'
 
@@ -112,12 +113,12 @@ const loginSubmit = async () => {
   } else {
     try {
       loading.value = true
-      const { user } = await signInApi({
+      const { data } = await signInApi({
         email: email.value,
         password: password.value
       })
       errorMsg.value = ''
-      setCookieToke(user.token)
+      setCookieToke(data.token)
       router.push({ name: 'wall' })
     } catch (err) {
       console.log(err)
