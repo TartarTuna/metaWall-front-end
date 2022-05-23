@@ -96,7 +96,8 @@
 <script setup>
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
-import { signInApi, facebookSignInApi, googleSignInApi } from '@/apis/user.js'
+import { signInApi } from '@/apis/user'
+import { facebookSignInApi, googleSignInApi } from '@/apis/auth'
 import { setCookieToke, clearUserInfo } from '@/compatibles/method'
 import Banner from '@/components/Banner.vue'
 
