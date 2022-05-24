@@ -19,9 +19,11 @@ const routes = [
     beforeEnter: guard.beforeEnter.checkAuth
   },
   {
-    path: '/personal',
+    path: '/personal/:userId',
     name: 'personal',
-    component: () => import('@/views/Personal.vue')
+    component: () => import('@/views/Personal.vue'),
+    props: true,
+    beforeEnter: guard.beforeEnter.checkUser
   },
   {
     path: '/follow',
@@ -36,7 +38,8 @@ const routes = [
   {
     path: '/post',
     name: 'post',
-    component: () => import('@/views/Post.vue')
+    component: () => import('@/views/Post.vue'),
+    beforeEnter: guard.beforeEnter.checkAuth
   },
   {
     path: '/profile',

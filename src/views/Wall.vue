@@ -19,13 +19,13 @@
               v-for="post in posts"
               :key="post._id"
               :post="post"
-              @post-like="postLikeHandler"
-              @delete-like="deleteLikeHandler"
-              @post-comment="postCommentHandler"
-              @edit-comment="editCommentHandler"
-              @delete-comment="deleteCommentHandler"
-              @edit-post="editPostHandler"
-              @delete-post="deletePostHandler"
+              @post-like="postLike"
+              @delete-like="deleteLike"
+              @post-comment="postComment"
+              @edit-comment="editComment"
+              @delete-comment="deleteComment"
+              @edit-post="editPost"
+              @delete-post="deletePost"
             />
           </ul>
           <EmptyPostCard v-else />
@@ -99,7 +99,7 @@ const changeKeyword = (value) => {
  * 按讚貼文
  * @param {string} postId 貼文編號
  */
-const postLikeHandler = (postId) => {
+const postLike = (postId) => {
   const post = posts.value.find((item) => item._id === postId)
   post.likes.push({ _id: user.value._id })
 }
@@ -107,7 +107,7 @@ const postLikeHandler = (postId) => {
  * 移除貼文的按讚
  * @param {string} postId 貼文編號
  */
-const deleteLikeHandler = (postId) => {
+const deleteLike = (postId) => {
   const post = posts.value.find((item) => item._id === postId)
   const index = post.likes.findIndex((item) => item._id === user.value._id)
   if (~index) post.likes.splice(index, 1)
@@ -117,7 +117,7 @@ const deleteLikeHandler = (postId) => {
  * @param {string} postId 貼文編號
  * @param {object} comment 留言資訊
  */
-const postCommentHandler = ({ postId, comment }) => {
+const postComment = ({ postId, comment }) => {
   const post = posts.value.find((item) => item._id === postId)
   post.comments.push(comment)
 }
@@ -127,7 +127,7 @@ const postCommentHandler = ({ postId, comment }) => {
  * @param {string} commentId 留言編號
  * @param {string} content 內容
  */
-const editCommentHandler = ({ postId, commentId, content }) => {
+const editComment = ({ postId, commentId, content }) => {
   const post = posts.value.find((item) => item._id === postId)
   const comment = post.comments.find((item) => item._id === commentId)
   comment.content = content
@@ -137,7 +137,7 @@ const editCommentHandler = ({ postId, commentId, content }) => {
  * @param {string} postId 貼文編號
  * @param {string} commentId 留言編號
  */
-const deleteCommentHandler = ({ postId, commentId }) => {
+const deleteComment = ({ postId, commentId }) => {
   const post = posts.value.find((item) => item._id === postId)
   const index = post.comments.findIndex((item) => item._id === commentId)
   if (~index) post.comments.splice(index, 1)
@@ -149,7 +149,7 @@ const deleteCommentHandler = ({ postId, commentId }) => {
  * @param {string} image 圖片
  * @param {array} tag 標籤
  */
-const editPostHandler = ({ postId, content, image, tag }) => {
+const editPost = ({ postId, content, image, tag }) => {
   const post = posts.value.find((item) => item._id === postId)
   post.content = content
   post.tag = tag
@@ -159,7 +159,7 @@ const editPostHandler = ({ postId, content, image, tag }) => {
  * 刪除貼文
  * @param {string} postId 貼文編號
  */
-const deletePostHandler = (postId) => {
+const deletePost = (postId) => {
   const index = posts.value.findIndex((item) => item._id === postId)
   if (~index) posts.value.splice(index, 1)
 }

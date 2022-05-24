@@ -5,7 +5,9 @@
   >
     <div class="container px-lg-12">
       <h1 class="font-paytone">
-        <router-link to="Wall" class="navbar-brand fs-1">MetaWall</router-link>
+        <router-link :to="{ name: 'wall' }" class="navbar-brand fs-1"
+          >MetaWall</router-link
+        >
       </h1>
       <section class="d-flex align-items-center navDropdown">
         <img
@@ -32,21 +34,21 @@
           >
             <li class="border border-dark border-2 bg-white">
               <router-link
-                to="personal"
+                :to="{ name: 'personal', params: { userId: user._id } }"
                 class="dropdown-item fw-bold text-center px-4 py-2"
                 >我的貼文牆</router-link
               >
             </li>
             <li class="border border-dark border-2 border-top-0 bg-white">
               <router-link
-                to="profile"
+                :to="{ name: 'profile' }"
                 class="dropdown-item fw-bold text-center px-4 py-2"
                 >修改個人資料</router-link
               >
             </li>
             <li class="border border-dark border-2 border-top-0 bg-white">
               <router-link
-                to="/"
+                :to="{ name: 'login' }"
                 class="dropdown-item fw-bold text-center px-4 py-2"
                 >登出</router-link
               >

@@ -8,6 +8,14 @@ import axios from '@/plugins/axios'
 export const getPosts = (params) => axios.get('/posts', { params })
 
 /**
+ * 取得特定會員的貼文
+ * @param {object} params query string
+ * @returns {promise}
+ */
+export const getSpecificUserPosts = (userId, params) =>
+  axios.get(`/posts/${userId}/user`, { params })
+
+/**
  * 新增貼文
  * @param {object} payload 貼文內容
  * @returns {promise}

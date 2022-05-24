@@ -11,7 +11,7 @@
         <div
           class="card border border-dark border-2 shadow-pushcard border8px p-5"
         >
-          <form>
+          <form @submit.prevent>
             <div class="form-group mb-3">
               <label for="content fw-bold">貼文內容</label>
               <textarea

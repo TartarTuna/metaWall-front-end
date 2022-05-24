@@ -5,7 +5,10 @@
       <!-- ---left main--- -->
       <div class="col-lg-7">
         <div class="card mb-3 border8px border-2 cardDashBoard">
-          <div class="row g-0 px-4">
+          <div v-if="userLoading" class="text-center" style="line-height: 88px">
+            載入中...
+          </div>
+          <div v-else class="row g-0 px-4">
             <div class="col-2 col-lg-1 align-self-center">
               <img
                 src="@/assets/img/user6.png"
@@ -21,756 +24,41 @@
                 </p>
               </div>
               <button
+                v-if="!isMe"
                 type="button"
-                class="btn btn-warning me-2 my-4 px-lg-5 border border-dark border-2 border8px shadow-pushcard d-block fw-bold"
+                class="btn me-2 my-4 px-lg-5 border border-dark border-2 border8px shadow-pushcard d-block fw-bold"
+                :class="isTracked ? 'btn-gray-light' : 'btn-warning'"
+                @click="trackHandler"
               >
-                追蹤
-              </button>
-              <button
-                type="button"
-                class="btn btn-gray-light me-2 my-4 px-lg-5 border border-dark border-2 border8px shadow-pushcard d-none fw-bold"
-              >
-                取消追蹤
+                {{ isTracked ? '取消追蹤' : '追蹤' }}
               </button>
             </div>
           </div>
         </div>
-        <div class="row">
-          <div class="col-lg-4 mb-md-2 mb-3">
-            <select id="newPost" class="form-select fw-bold border-2 w-100">
-              <option selected>最新貼文</option>
-              <option>排序最新</option>
-              <option>排序最舊</option>
-              <option>tag1</option>
-              <option>tag2</option>
-              <option>tag3</option>
-              <option>tag4</option>
-              <option>tag5</option>
-            </select>
-          </div>
-          <div class="col-lg-8">
-            <div class="input-group mb-3">
-              <input
-                type="text"
-                class="form-control fw-bold border-2 border-end-0"
-                placeholder="搜尋貼文"
-                aria-label="search"
-                aria-describedby="button-search"
-              />
-              <button
-                class="btn btn-primary border-2 border border-dark rounded-0 d-flex align-items-center"
-                type="button"
-                id="button-search"
-              >
-                <span class="material-icons-outlined"> search </span>
-              </button>
-            </div>
-          </div>
-        </div>
-        <ul class="ps-0">
-          <!-- ----fix ex- 編輯狀態可以用這個充當一下懶人包，可能有不足的再麻煩了- -->
-          <li
-            class="card h-100 py-4 px-4 mb-3 border-2 shadow-pushcard border8px"
-          >
-            <div class="d-flex align-items-center mb-3">
-              <img
-                class="me-3 img-fluid"
-                src="@/assets/img/user6.png"
-                alt="user6"
-              />
-              <div class="d-flex flex-column mt-2">
-                <router-link to="personal" class="mb-0 fw-bold"
-                  >阿爾敏</router-link
-                >
-                <small class="text-muted">2022/1/10 12:00</small>
-              </div>
-              <div class="ms-auto d-flex">
-                <img
-                  src="../assets/img/edit.png"
-                  class="d-block m-auto mx-2"
-                  alt=""
-                />
-                <img
-                  src="../assets/img/share.png"
-                  class="d-block m-auto mx-2"
-                  alt=""
-                />
-                <img
-                  src="../assets/img/trash.png"
-                  class="d-block m-auto mx-2"
-                  alt=""
-                />
-              </div>
-            </div>
-            <form>
-              <div class="form-group mb-3">
-                <label for="content fw-bold">修改貼文內容</label>
-                <textarea
-                  class="form-control border border-dark border-2"
-                  type="text"
-                  id="content"
-                  rows="5"
-                  placeholder="輸入您的貼文內容"
-                ></textarea>
-              </div>
-              <div class="form-group mb-3">
-                <label for="content fw-bold">修改tag</label>
-                <textarea
-                  class="form-control border border-dark border-2"
-                  type="text"
-                  id="content"
-                  rows="5"
-                  placeholder="修改tag"
-                ></textarea>
-              </div>
-              <div class="input-group mb-3">
-                <input
-                  type="text"
-                  style="display: none"
-                  placeholder="上傳圖片"
-                />
-                <button class="btn btn-dark border" style="border-radius: 8px">
-                  上傳圖片
-                </button>
-              </div>
-              <img
-                src="@/assets/img/photo1.png"
-                alt="photo1"
-                class="w-100 img-fluid mb-2"
-              />
-              <div class="d-grid gap-2 col-2 ms-auto mt-5">
-                <button
-                  type="submit"
-                  class="btn btn-primary border border-dark border-2 fw-bold py-2 border8px"
-                >
-                  OK
-                </button>
-              </div>
-            </form>
-            <!-- ---thumb--- -->
-            <div class="d-flex mt-3">
-              <button type="button" class="btn py-0">
-                <span
-                  class="material-icons material-icons-outlined text-primary fs-5"
-                >
-                  thumb_up
-                </span>
-              </button>
-              <p class="m-0 fs-7">12</p>
-            </div>
-            <!-- -add--message--- -->
-            <div class="d-flex mt-3">
-              <img
-                src="@/assets/img/user6.png"
-                alt="usr6"
-                class="img-fluid me-1"
-              />
-              <div class="input-group">
-                <input
-                  type="text"
-                  class="form-control border-dark border-2 border-end-0"
-                  placeholder="留言..."
-                  aria-label="message"
-                  aria-describedby="button-message"
-                />
-                <button
-                  class="btn btn-primary border-dark border-2 px-4 rounded-0 fw-bold"
-                  type="button"
-                  id="button-message"
-                >
-                  留言
-                  <span
-                    class="spinner-border spinner-border-sm"
-                    role="status"
-                    aria-hidden="true"
-                  ></span>
-                </button>
-              </div>
-            </div>
-            <!-- ----openmessage---- -->
-            <div class="card h-100 py-3 border-0 rounded-0">
-              <a
-                class="btn btn-outline-primary border-0 fw-bold"
-                data-bs-toggle="collapse"
-                href="#collapseExample"
-                role="button"
-                aria-expanded="false"
-                aria-controls="collapseExample"
-                style="box-shadow: none"
-              >
-                查看其他留言
-              </a>
-            </div>
-            <section class="collapse" id="collapseExample">
-              <ul class="card card-body border-0">
-                <li
-                  class="card h-100 p-3 border-0 rounded-3 mt-3 bg-gray-light"
-                >
-                  <div class="d-flex align-items-center mb-2">
-                    <img
-                      class="me-3 img-fluid"
-                      src="@/assets/img/user6.png"
-                      alt="user6"
-                    />
-                    <div class="d-flex flex-column mt-2">
-                      <router-link to="personal" class="mb-0 fw-bold"
-                        >阿爾敏</router-link
-                      >
-                      <small class="text-muted">2022/1/11 10:00</small>
-                    </div>
-                    <div class="ms-auto d-flex">
-                      <img
-                        src="../assets/img/edit.png"
-                        class="d-block m-auto mx-2"
-                        alt=""
-                      />
-                      <img
-                        src="../assets/img/trash.png"
-                        class="d-block m-auto mx-2"
-                        alt=""
-                      />
-                    </div>
-                  </div>
-                  <div class="input-group mb-3">
-                    <input
-                      type="text"
-                      class="form-control"
-                      placeholder="修改貼文內容"
-                      aria-label="Recipient's username"
-                      aria-describedby="button-addon2"
-                    />
-                    <button
-                      class="btn btn-primary rounded-0"
-                      type="button"
-                      id="content"
-                    >
-                      OK
-                    </button>
-                  </div>
-                </li>
-                <!-- ------------- -->
-                <li
-                  class="card h-100 p-3 border-0 rounded-3 mt-3 bg-gray-light"
-                >
-                  <div class="d-flex align-items-center mb-2">
-                    <img
-                      class="me-3 img-fluid"
-                      src="@/assets/img/user6.png"
-                      alt="user6"
-                    />
-                    <div class="d-flex flex-column mt-2">
-                      <router-link to="personal" class="mb-0 fw-bold"
-                        >阿爾敏</router-link
-                      >
-                      <small class="text-muted">2022/1/11 10:00</small>
-                    </div>
-                    <div class="ms-auto d-flex">
-                      <img
-                        src="../assets/img/edit.png"
-                        class="d-block m-auto mx-2"
-                        alt=""
-                      />
-                      <img
-                        src="../assets/img/trash.png"
-                        class="d-block m-auto mx-2"
-                        alt=""
-                      />
-                    </div>
-                  </div>
-                  <p class="m-0 fw-bold">真的～我已經準備冬眠了</p>
-                </li>
-                <!-- ------------- -->
-                <li
-                  class="card h-100 p-3 border-0 rounded-3 mt-3 bg-gray-light"
-                >
-                  <div class="d-flex align-items-center mb-3">
-                    <img
-                      class="me-3 img-fluid"
-                      src="@/assets/img/user4.png"
-                      alt="user4"
-                    />
-                    <div class="d-flex flex-column mt-2">
-                      <router-link to="personal" class="mb-0 fw-bold"
-                        >波吉</router-link
-                      >
-                      <small class="text-muted font-xs">2022/1/11 10:00</small>
-                    </div>
-                    <div class="ms-auto d-flex">
-                      <img
-                        src="../assets/img/edit.png"
-                        class="d-block m-auto mx-2"
-                        alt=""
-                      />
-                      <img
-                        src="../assets/img/trash.png"
-                        class="d-block m-auto mx-2"
-                        alt=""
-                      />
-                    </div>
-                  </div>
-                  <p class="m-0 fw-bold">會嗎？我沒穿衣服都不覺得冷</p>
-                </li>
-              </ul>
-            </section>
-          </li>
-          <!-- ----1 people--- -->
-          <li
-            class="card h-100 py-4 px-4 mb-3 border-2 shadow-pushcard border8px"
-          >
-            <div class="d-flex align-items-center mb-3">
-              <img
-                class="me-3 img-fluid"
-                src="@/assets/img/user6.png"
-                alt="user6"
-              />
-              <div class="d-flex flex-column mt-2">
-                <router-link to="personal" class="mb-0 fw-bold"
-                  >阿爾敏</router-link
-                >
-                <small class="text-muted">2022/1/10 12:00</small>
-              </div>
-              <div class="ms-auto d-flex">
-                <img
-                  src="../assets/img/edit.png"
-                  class="d-block m-auto mx-2"
-                  alt=""
-                />
-                <img
-                  src="../assets/img/share.png"
-                  class="d-block m-auto mx-2"
-                  alt=""
-                />
-                <img
-                  src="../assets/img/trash.png"
-                  class="d-block m-auto mx-2"
-                  alt=""
-                />
-              </div>
-            </div>
-            <p class="fw-bold">今天找到一張大海的照片<br />太美拉～～～</p>
-            <!-- ---tag--- -->
-            <div class="card-footer border-0 bg-white d-flex">
-              <div class="mx-2 text-primary">#tag1</div>
-              <div class="mx-2 text-primary">#tag2</div>
-              <div class="mx-2 text-primary">#tag3</div>
-            </div>
-            <img src="@/assets/img/photo3.png" alt="photo2" class="img-fluid" />
-            <!-- ---thumb--- -->
-            <div class="d-flex mt-3">
-              <button type="button" class="btn py-0">
-                <span
-                  class="material-icons material-icons-outlined text-primary fs-5"
-                >
-                  thumb_up
-                </span>
-              </button>
-              <p class="m-0 fs-7">12</p>
-            </div>
-            <!-- -add--message--- -->
-            <div class="d-flex mt-3">
-              <img
-                src="@/assets/img/user1.png"
-                alt="usr1"
-                class="img-fluid me-1"
-              />
-              <div class="input-group">
-                <input
-                  type="text"
-                  class="form-control border-dark border-2 border-end-0"
-                  placeholder="留言..."
-                  aria-label="message"
-                  aria-describedby="button-message"
-                />
-                <button
-                  class="btn btn-primary border-dark border-2 px-4 rounded-0 fw-bold"
-                  type="button"
-                  id="button-message"
-                >
-                  留言
-                  <span
-                    class="spinner-border spinner-border-sm"
-                    role="status"
-                    aria-hidden="true"
-                  ></span>
-                </button>
-              </div>
-            </div>
-            <!-- ----openmessage---- -->
-            <div class="card h-100 py-3 border-0 rounded-0">
-              <a
-                class="btn btn-outline-primary border-0 fw-bold"
-                data-bs-toggle="collapse"
-                href="#collapseExample"
-                role="button"
-                aria-expanded="false"
-                aria-controls="collapseExample"
-                style="box-shadow: none"
-              >
-                查看其他留言
-              </a>
-            </div>
-            <section class="collapse" id="collapseExample">
-              <ul class="card card-body border-0">
-                <li
-                  class="card h-100 p-3 border-0 rounded-3 mt-3 bg-gray-light"
-                >
-                  <div class="d-flex align-items-center mb-2">
-                    <img
-                      class="me-3 img-fluid"
-                      src="@/assets/img/user2.png"
-                      alt="user2"
-                    />
-                    <div class="d-flex flex-column mt-2">
-                      <router-link to="personal" class="mb-0 fw-bold"
-                        >希琳</router-link
-                      >
-                      <small class="text-muted">2022/1/11 10:00</small>
-                    </div>
-                    <div class="ms-auto d-flex">
-                      <img
-                        src="../assets/img/edit.png"
-                        class="d-block m-auto mx-2"
-                        alt=""
-                      />
-                      <img
-                        src="../assets/img/trash.png"
-                        class="d-block m-auto mx-2"
-                        alt=""
-                      />
-                    </div>
-                  </div>
-                  <p class="m-0 fw-bold">跳下去?</p>
-                </li>
-                <!-- ------ -->
-                <li
-                  class="card h-100 p-3 border-0 rounded-3 mt-3 bg-gray-light"
-                >
-                  <div class="d-flex align-items-center mb-3">
-                    <img
-                      class="me-3 img-fluid"
-                      src="@/assets/img/user4.png"
-                      alt="user4"
-                    />
-                    <div class="d-flex flex-column mt-2">
-                      <router-link to="personal" class="mb-0 fw-bold"
-                        >波吉</router-link
-                      >
-                      <small class="text-muted font-xs">2022/1/11 10:00</small>
-                    </div>
-                    <div class="ms-auto d-flex">
-                      <img
-                        src="../assets/img/edit.png"
-                        class="d-block m-auto mx-2"
-                        alt=""
-                      />
-                      <img
-                        src="../assets/img/trash.png"
-                        class="d-block m-auto mx-2"
-                        alt=""
-                      />
-                    </div>
-                  </div>
-                  <p class="m-0 fw-bold">水鬼開抓囉</p>
-                </li>
-              </ul>
-            </section>
-          </li>
-          <!-- --- 2 people--- -->
-          <li
-            class="card h-100 py-4 px-4 mb-3 border-2 shadow-pushcard border8px"
-          >
-            <div class="d-flex align-items-center mb-3">
-              <img
-                class="me-3 img-fluid"
-                src="@/assets/img/user1.png"
-                alt="user1"
-              />
-              <div class="d-flex flex-column mt-2">
-                <router-link to="personal" class="mb-0 fw-bold"
-                  >邊緣大杰</router-link
-                >
-                <small class="text-muted">2022/1/10 12:00</small>
-              </div>
-              <div class="ms-auto d-flex">
-                <img
-                  src="../assets/img/edit.png"
-                  class="d-block m-auto mx-2"
-                  alt=""
-                />
-                <img
-                  src="../assets/img/share.png"
-                  class="d-block m-auto mx-2"
-                  alt=""
-                />
-                <img
-                  src="../assets/img/trash.png"
-                  class="d-block m-auto mx-2"
-                  alt=""
-                />
-              </div>
-            </div>
-            <p>下雨囉</p>
-            <!-- ---tag--- -->
-            <div class="card-footer border-0 bg-white d-flex">
-              <div class="mx-2 text-primary">#tag1</div>
-              <div class="mx-2 text-primary">#tag2</div>
-              <div class="mx-2 text-primary">#tag3</div>
-            </div>
-            <img src="@/assets/img/photo2.png" alt="photo2" class="img-fluid" />
-            <!-- ---thumb--- -->
-            <div class="d-flex mt-3">
-              <button type="button" class="btn py-0">
-                <span
-                  class="material-icons material-icons-outlined text-muted fs-5"
-                >
-                  thumb_up
-                </span>
-              </button>
-              <p class="text-muted m-0 fs-7">成為第一個按讚的朋友</p>
-            </div>
-            <!-- -add--message--- -->
-            <div class="d-flex mt-3">
-              <img
-                src="@/assets/img/user1.png"
-                alt="usr1"
-                class="img-fluid me-1"
-              />
-              <div class="input-group">
-                <input
-                  type="text"
-                  class="form-control text-dark border-dark border-2 border-end-0"
-                  placeholder=""
-                  value="這邊淹水"
-                  aria-label="message"
-                  aria-describedby="button-message"
-                />
-                <button
-                  class="btn btn-warning px-4 rounded-0 border-dark border-2 fw-bold"
-                  type="button"
-                  id="button-message"
-                >
-                  留言
-                  <span
-                    class="spinner-border spinner-border-sm"
-                    role="status"
-                    aria-hidden="true"
-                  ></span>
-                </button>
-              </div>
-            </div>
-            <!-- ----openmessage---- -->
-            <div class="card h-100 py-3 border-0 rounded-0">
-              <a
-                class="btn btn-outline-primary border-0 fw-bold"
-                data-bs-toggle="collapse"
-                href="#collapseExample1"
-                role="button"
-                aria-expanded="false"
-                aria-controls="collapseExample"
-                style="box-shadow: none"
-              >
-                查看其他留言
-              </a>
-            </div>
-            <section class="collapse" id="collapseExample1">
-              <ul class="card card-body border-0">
-                <li
-                  class="card h-100 p-3 border-0 rounded-3 mt-3 bg-gray-light"
-                >
-                  <div class="d-flex align-items-center mb-2">
-                    <img
-                      class="me-3 img-fluid"
-                      src="@/assets/img/user2.png"
-                      alt="user2"
-                    />
-                    <div class="d-flex flex-column mt-2">
-                      <router-link to="personal" class="mb-0 fw-bold"
-                        >希琳</router-link
-                      >
-                      <small class="text-muted">2022/1/11 10:00</small>
-                    </div>
-                    <div class="ms-auto d-flex">
-                      <img
-                        src="../assets/img/edit.png"
-                        class="d-block m-auto mx-2"
-                        alt=""
-                      />
-                      <img
-                        src="../assets/img/trash.png"
-                        class="d-block m-auto mx-2"
-                        alt=""
-                      />
-                    </div>
-                  </div>
-                  <p class="m-0 fw-bold">路上布魯樂谷</p>
-                </li>
-                <!-- ----- -->
-                <li
-                  class="card h-100 p-3 border-0 rounded-3 mt-3 bg-gray-light"
-                >
-                  <div class="d-flex align-items-center mb-3">
-                    <img
-                      class="me-3 img-fluid"
-                      src="@/assets/img/user4.png"
-                      alt="user4"
-                    />
-                    <div class="d-flex flex-column mt-2">
-                      <router-link to="personal" class="mb-0 fw-bold"
-                        >波吉</router-link
-                      >
-                      <small class="text-muted font-xs">2022/1/11 10:00</small>
-                    </div>
-                    <div class="ms-auto d-flex">
-                      <img
-                        src="../assets/img/edit.png"
-                        class="d-block m-auto mx-2"
-                        alt=""
-                      />
-                      <img
-                        src="../assets/img/trash.png"
-                        class="d-block m-auto mx-2"
-                        alt=""
-                      />
-                    </div>
-                  </div>
-                  <p class="m-0 fw-bold">淹到生活不能自理</p>
-                </li>
-              </ul>
-            </section>
-          </li>
-          <!-- --- 3 people--- -->
-          <li
-            class="card h-100 py-4 px-4 mb-3 border-2 shadow-pushcard border8px"
-          >
-            <div class="d-flex align-items-center mb-3">
-              <img
-                class="me-3 img-fluid"
-                src="@/assets/img/user6.png"
-                alt="user6"
-              />
-              <div class="d-flex flex-column mt-2">
-                <router-link to="personal" class="mb-0 fw-bold"
-                  >阿爾敏</router-link
-                >
-                <small class="text-muted">2022/1/10 12:00</small>
-              </div>
-              <div class="ms-auto d-flex">
-                <img
-                  src="../assets/img/edit.png"
-                  class="d-block m-auto mx-2"
-                  alt=""
-                />
-                <img
-                  src="../assets/img/share.png"
-                  class="d-block m-auto mx-2"
-                  alt=""
-                />
-                <img
-                  src="../assets/img/trash.png"
-                  class="d-block m-auto mx-2"
-                  alt=""
-                />
-              </div>
-            </div>
-            <p class="fw-bold">爆炸</p>
-            <!-- ---tag--- -->
-            <div class="card-footer border-0 bg-white d-flex">
-              <div class="mx-2 text-primary">#tag1</div>
-              <div class="mx-2 text-primary">#tag2</div>
-              <div class="mx-2 text-primary">#tag3</div>
-            </div>
-            <!-- <img src="#" alt="#">預備用 img有上傳的話會在這 -->
-            <!-- ---thumb--- -->
-            <div class="d-flex mt-3">
-              <button type="button" class="btn py-0">
-                <span
-                  class="material-icons material-icons-outlined text-muted fs-5"
-                >
-                  thumb_up
-                </span>
-              </button>
-              <p class="text-muted m-0 fs-7">成為第一個按讚的朋友</p>
-            </div>
-            <!-- -add--message--- -->
-            <div class="d-flex mt-3">
-              <img
-                src="@/assets/img/user1.png"
-                alt="usr1"
-                class="img-fluid me-1"
-              />
-              <div class="input-group">
-                <input
-                  type="text"
-                  class="form-control text-dark border-dark border-2 border-end-0"
-                  placeholder=""
-                  value="......."
-                  aria-label="message"
-                  aria-describedby="button-message"
-                />
-                <button
-                  class="btn btn-warning px-4 rounded-0 border-dark border-2 fw-bold"
-                  type="button"
-                  id="button-message"
-                >
-                  留言
-                  <span
-                    class="spinner-border spinner-border-sm"
-                    role="status"
-                    aria-hidden="true"
-                  ></span>
-                </button>
-              </div>
-            </div>
-            <!-- ----openmessage---- -->
-            <div class="card h-100 py-3 border-0 rounded-0">
-              <a
-                class="btn btn-outline-primary border-0 fw-bold"
-                data-bs-toggle="collapse"
-                href="#collapseExample2"
-                role="button"
-                aria-expanded="false"
-                aria-controls="collapseExample"
-                style="box-shadow: none"
-              >
-                查看其他留言
-              </a>
-            </div>
-            <section class="collapse" id="collapseExample2">
-              <ul class="card card-body border-0">
-                <li
-                  class="card h-100 p-3 border-0 rounded-3 mt-3 bg-gray-light"
-                >
-                  <div class="d-flex align-items-center mb-2">
-                    <img
-                      class="me-3 img-fluid"
-                      src="@/assets/img/user2.png"
-                      alt="user2"
-                    />
-                    <div class="d-flex flex-column mt-2">
-                      <router-link to="personal" class="mb-0 fw-bold"
-                        >希琳</router-link
-                      >
-                      <small class="text-muted">2022/1/11 10:00</small>
-                    </div>
-                    <div class="ms-auto d-flex">
-                      <img
-                        src="../assets/img/edit.png"
-                        class="d-block m-auto mx-2"
-                        alt=""
-                      />
-                      <img
-                        src="../assets/img/trash.png"
-                        class="d-block m-auto mx-2"
-                        alt=""
-                      />
-                    </div>
-                  </div>
-                  <p class="m-0 fw-bold">.........</p>
-                </li>
-              </ul>
-            </section>
-          </li>
-        </ul>
+        <PostFilter
+          :loading="postLoading"
+          :sort="sort"
+          @change-sort="changeSort"
+          @change-keyword="changeKeyword"
+        />
+        <empty-post-card v-if="postLoading">載入中...</empty-post-card>
+        <template v-else>
+          <ul v-if="posts.length" class="ps-0">
+            <PostCard
+              v-for="post in posts"
+              :key="post._id"
+              :post="post"
+              @post-like="postLike"
+              @delete-like="deleteLike"
+              @post-comment="postComment"
+              @edit-comment="editComment"
+              @delete-comment="deleteComment"
+              @edit-post="editPost"
+              @delete-post="deletePost"
+            />
+          </ul>
+          <EmptyPostCard v-else />
+        </template>
       </div>
       <!-- ---right menu--- -->
       <RightBar />
@@ -781,7 +69,209 @@
 </template>
 
 <script setup>
-import Navbar from '@/components/Navbar.vue'
-import RightBar from '@/components/RightBar.vue'
-import PhoneMenu from '@/components/PhoneMenu.vue'
+import { ref, computed } from 'vue'
+import { onBeforeRouteUpdate } from 'vue-router'
+import PostFilter from '@/components/posts/filters/PostFilter.vue'
+import PostCard from '@/components/posts/cards/PostCard.vue'
+import EmptyPostCard from '@/components/posts/cards/EmptyPostCard.vue'
+import { user as me } from '@/compatibles/data'
+import { getSpecificUserPosts } from '@/apis/post'
+import { getTracks, postTrack, deleteTrack } from '@/apis/track'
+
+const userLoading = ref(false)
+const postLoading = ref(false)
+const sort = ref('desc')
+const keyword = ref('')
+const tracks = ref([])
+const posts = ref([])
+const user = ref({})
+const props = defineProps({
+  userId: {
+    type: String,
+    required: true
+  }
+})
+
+/**
+ * 是否為自己
+ * @returns {boolean}
+ */
+const isMe = computed(() => {
+  return me.value._id === props.userId
+})
+/**
+ * 是否已經追蹤
+ * @returns {boolean}
+ */
+const isTracked = computed(() => {
+  return tracks.value.some((item) => item._id === props.userId)
+})
+/**
+ * 初始化畫面的值
+ * @param {string} userId 會員編號
+ */
+const initData = async (userId) => {
+  try {
+    userLoading.value = true
+    postLoading.value = true
+    const [tracksData, postData] = await Promise.all([
+      getTracks(),
+      getPosts(userId)
+    ])
+    tracks.value = tracksData.data?.tracking ?? []
+    posts.value = postData
+  } finally {
+    userLoading.value = false
+    postLoading.value = false
+  }
+}
+/**
+ * 取得個人的貼文
+ * @param {string} userId 會員編號
+ * @returns {promise}
+ */
+const getPosts = async (userId) => {
+  const { data } = await getSpecificUserPosts(userId, {
+    createdAt: sort.value,
+    q: keyword.value
+  })
+  return data
+}
+/**
+ * 設置個人的貼文
+ * @param {boolean} reset 是否需初始化貼文列表和頁碼
+ */
+const setPosts = async ({ reset = false } = {}) => {
+  try {
+    postLoading.value = true
+    if (reset) {
+      posts.value = []
+    }
+    const data = await getPosts(props.userId)
+    posts.value.push(...data)
+  } finally {
+    postLoading.value = false
+  }
+}
+/**
+ * 追蹤事件
+ */
+const trackHandler = () => {
+  try {
+    if (isTracked.value) {
+      deleteTrack(props.userId)
+
+      const index = tracks.value.findIndex((item) => item._id === props.userId)
+      tracks.value.splice(index, 1)
+      user.value.tracking--
+    } else {
+      postTrack(props.userId)
+      tracks.value.push(user.value)
+      user.value.tracking++
+    }
+  } catch (e) {
+    alert(e.message)
+  }
+}
+/**
+ * 按讚貼文
+ * @param {string} postId 貼文編號
+ */
+const postLike = (postId) => {
+  const post = posts.value.find((item) => item._id === postId)
+  post.likes.push({ _id: me.value._id })
+}
+/**
+ * 移除貼文的按讚
+ * @param {string} postId 貼文編號
+ */
+const deleteLike = (postId) => {
+  const post = posts.value.find((item) => item._id === postId)
+  const index = post.likes.findIndex((item) => item._id === me.value._id)
+  if (~index) post.likes.splice(index, 1)
+}
+/**
+ * 貼文留言
+ * @param {string} postId 貼文編號
+ * @param {object} comment 留言資訊
+ */
+const postComment = ({ postId, comment }) => {
+  const post = posts.value.find((item) => item._id === postId)
+  post.comments.push(comment)
+}
+/**
+ * 編輯貼文留言
+ * @param {string} postId 貼文編號
+ * @param {string} commentId 留言編號
+ * @param {string} content 內容
+ */
+const editComment = ({ postId, commentId, content }) => {
+  const post = posts.value.find((item) => item._id === postId)
+  const comment = post.comments.find((item) => item._id === commentId)
+  comment.content = content
+}
+/**
+ * 刪除貼文留言
+ * @param {string} postId 貼文編號
+ * @param {string} commentId 留言編號
+ */
+const deleteComment = ({ postId, commentId }) => {
+  const post = posts.value.find((item) => item._id === postId)
+  const index = post.comments.findIndex((item) => item._id === commentId)
+  if (~index) post.comments.splice(index, 1)
+}
+/**
+ * 編輯貼文
+ * @param {string} postId 貼文編號
+ * @param {string} content 內容
+ * @param {string} image 圖片
+ * @param {array} tag 標籤
+ */
+const editPost = ({ postId, content, image, tag }) => {
+  const post = posts.value.find((item) => item._id === postId)
+  post.content = content
+  post.tag = tag
+  post.image = image
+}
+/**
+ * 刪除貼文
+ * @param {string} postId 貼文編號
+ */
+const deletePost = (postId) => {
+  const index = posts.value.findIndex((item) => item._id === postId)
+  if (~index) posts.value.splice(index, 1)
+}
+/**
+ * 切換排序事件
+ * @param {string} value 排序方式
+ */
+const changeSort = (value) => {
+  sort.value = value
+  setPosts({ reset: true })
+}
+/**
+ * 變更搜尋的關鍵字
+ * @param {string} value 關鍵字
+ */
+const changeKeyword = (value) => {
+  keyword.value = value
+  setPosts({ reset: true })
+}
+
+onBeforeRouteUpdate((to, from) => {
+  const {
+    params: { userId }
+  } = to
+  if (props.userId !== userId) {
+    user.value = {
+      _id: userId
+    }
+    initData(userId)
+  }
+})
+
+user.value = {
+  _id: props.userId
+}
+initData(props.userId)
 </script>

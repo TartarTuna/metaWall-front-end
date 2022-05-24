@@ -8,9 +8,11 @@
         alt="user1"
       />
       <div class="d-flex flex-column mt-2">
-        <router-link to="personal" class="mb-0 fw-bold">{{
-          post.user.name
-        }}</router-link>
+        <router-link
+          :to="{ name: 'personal', params: { userId: post.user._id } }"
+          class="mb-0 fw-bold"
+          >{{ post.user.name }}</router-link
+        >
         <small class="text-muted">{{ dayFormat(post.createdAt) }}</small>
       </div>
       <div class="ms-auto d-flex">
