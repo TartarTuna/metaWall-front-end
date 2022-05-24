@@ -17,7 +17,12 @@
               <div
                 class="col-3 d-flex justify-content-center align-self-center"
               >
-                <img class="d-block mx-auto" :src="user.photo" alt="user1" />
+                <img
+                  width="50"
+                  class="d-block mx-auto"
+                  :src="correctImageUrl(user.photo)"
+                  alt="user1"
+                />
               </div>
               <div class="col-9">
                 <p class="m-0 ms-xl-n3 fw-bold">{{ user.name }}</p>
@@ -208,4 +213,5 @@
 
 <script setup>
 import { user } from '@/compatibles/data'
+import { correctImageUrl } from '@/compatibles/image-url'
 </script>
