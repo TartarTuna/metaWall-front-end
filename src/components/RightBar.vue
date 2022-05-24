@@ -4,7 +4,7 @@
     <div class="border border-dark border-2 px-4 py-5">
       <div class="d-grid gap-2 mb-4">
         <router-link
-          to="post"
+          :to="{ name: 'post' }"
           class="btn btn-primary shadow-black border8px border border-dark border-2 py-3 fw-bold"
         >
           張貼動態
@@ -12,7 +12,7 @@
       </div>
       <ul class="ps-0 mt-6">
         <li class="card h-100 border-0 mb-3">
-          <router-link to="personal">
+          <router-link :to="{ name: 'personal', params: { userId: user._id } }">
             <div class="row d-flex align-items-center">
               <div
                 class="col-3 d-flex justify-content-center align-self-center"
@@ -31,7 +31,7 @@
           </router-link>
         </li>
         <li class="card h-100 border-0 mb-3">
-          <router-link to="follow">
+          <router-link :to="{ name: 'follow' }">
             <div class="row d-flex align-items-center">
               <div
                 class="col-3 d-flex justify-content-center align-self-center"
@@ -49,7 +49,7 @@
           </router-link>
         </li>
         <li class="card h-100 border-0 mb-3">
-          <router-link to="like">
+          <router-link :to="{ name: 'like' }">
             <div class="row d-flex align-items-center">
               <div
                 class="col-3 d-flex justify-content-center align-self-center"

@@ -8,9 +8,11 @@
         alt="user2"
       />
       <div class="d-flex flex-column mt-2">
-        <router-link to="personal" class="mb-0 fw-bold">{{
-          comment.user.name
-        }}</router-link>
+        <router-link
+          :to="{ name: 'personal', params: { userId: comment.user._id } }"
+          class="mb-0 fw-bold"
+          >{{ comment.user.name }}</router-link
+        >
         <small class="text-muted">{{ dayFormat(comment.createdAt) }}</small>
       </div>
       <div v-if="user._id === comment.user._id" class="ms-auto d-flex">

@@ -17,8 +17,22 @@ const checkAuth = async (to, from) => {
   }
 }
 
+const checkUser = async (to, from) => {
+  try {
+    const auth = await checkAuth(to, from)
+    if (auth === true) {
+      // 檢查是否為有效的會員
+      // await getUserCheck(to.params.userId)
+      return true
+    }
+  } catch (e) {
+    return { name: 'login' }
+  }
+}
+
 export default {
   beforeEnter: {
-    checkAuth
+    checkAuth,
+    checkUser
   }
 }
