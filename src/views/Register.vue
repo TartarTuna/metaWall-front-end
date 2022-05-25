@@ -65,17 +65,18 @@
               >
             </div>
             <div class="d-grid gap-2 mb-2">
-              <button
+              <Button
+                :loading="loading"
                 type="submit"
                 class="btn btn-primary shadow-black border8px border-dark border-2 py-2 fw-bold"
                 :disabled="loading"
               >
                 註冊
-              </button>
+              </Button>
             </div>
           </form>
           <div class="text-center mt-3 mb-5 mb-lg-0 fw-bold">
-            <router-link to="/">登入</router-link>
+            <router-link :to="{ name: 'login' }">登入</router-link>
           </div>
         </div>
       </div>

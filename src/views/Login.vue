@@ -40,13 +40,14 @@
               />
             </div>
             <div class="d-grid gap-2 mb-2">
-              <button
+              <Button
+                :loading="loading"
                 type="submit"
                 class="btn btn-primary shadow-black border8px border-dark border-2 py-2 fw-bold"
                 :disabled="loading"
               >
                 登入
-              </button>
+              </Button>
               <p v-show="errorMsg" class="text-danger text-center fs-7 mb-2">
                 {{ errorMsg }}
               </p>
@@ -84,7 +85,7 @@
               </button>
             </div>
             <div class="text-center mt-3 mb-5 mb-lg-0 fw-bold">
-              <router-link to="register">註冊帳號</router-link>
+              <router-link :to="{ name: 'register' }">註冊帳號</router-link>
             </div>
           </form>
         </div>
