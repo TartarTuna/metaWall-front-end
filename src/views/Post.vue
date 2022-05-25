@@ -56,20 +56,14 @@
             </div>
             <!-- 圖片檔案過大，僅限 1mb 以下檔案 圖片格式錯誤，僅限 JPG、PNG 圖片 -->
             <div class="d-grid gap-2 col-8 mx-auto mt-5">
-              <button
+              <Button
                 class="btn btn-gray-dark border border-dark border-2 fw-bold py-3 border8px"
                 type="submit"
+                :loading="isLoading"
                 @click="addNewPost"
               >
-                <p class="mb-0" v-if="!isLoading">送出貼文</p>
-                <div
-                  v-if="isLoading"
-                  class="spinner-border text-black"
-                  role="status"
-                >
-                  <span class="visually-hidden">Loading...</span>
-                </div>
-              </button>
+                送出貼文
+              </Button>
             </div>
           </form>
         </div>
