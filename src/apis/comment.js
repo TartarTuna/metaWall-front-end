@@ -19,7 +19,7 @@ export const deleteComment = (postId, commentId) =>
   axios.delete(`/posts/${postId}/comment/${commentId}`)
 
 /**
- * 刪除貼文留言
+ * 編輯貼文留言
  * @param {string} postId 貼文編號
  * @param {string} commentId 留言編號
  * @param {object} payload 編輯資訊

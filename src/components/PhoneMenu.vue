@@ -5,16 +5,16 @@
   >
     <ul class="d-flex justify-content-around mb-0 ps-0 rounded-pill">
       <li class="list-group-item border-0 bg-secondary rounded-pill">
-        <a href="./index.html">
+        <router-link :to="{ name: 'wall' }">
           <div
             class="rounded-circle border border-dark border-3 p-2 bg-white d-flex align-items-center"
           >
             <span class="material-icons material-icons-outlined"> home </span>
           </div>
-        </a>
+        </router-link>
       </li>
       <li class="list-group-item border-0 bg-secondary rounded-pill">
-        <a href="./follow.html">
+        <router-link :to="{ name: 'follow' }">
           <div
             class="rounded-circle border border-dark border-3 p-2 bg-white d-flex align-items-center"
           >
@@ -22,10 +22,10 @@
               notifications
             </span>
           </div>
-        </a>
+        </router-link>
       </li>
       <li class="list-group-item border-0 bg-secondary rounded-pill">
-        <a href="./like.html">
+        <router-link :to="{ name: 'like' }">
           <div
             class="rounded-circle border border-dark border-3 p-2 bg-white d-flex align-items-center"
           >
@@ -33,10 +33,10 @@
               thumb_up
             </span>
           </div>
-        </a>
+        </router-link>
       </li>
       <li class="list-group-item border-0 bg-secondary rounded-pill">
-        <a href="./post.html">
+        <router-link :to="{ name: 'post' }">
           <div
             class="rounded-circle border border-dark border-3 p-2 bg-primary"
           >
@@ -46,7 +46,7 @@
               add
             </span>
           </div>
-        </a>
+        </router-link>
       </li>
     </ul>
   </section>

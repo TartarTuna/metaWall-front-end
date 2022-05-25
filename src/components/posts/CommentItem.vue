@@ -39,7 +39,7 @@
         aria-describedby="button-addon2"
       />
       <Button
-        :load="loading"
+        :loading="loading"
         class="btn btn-primary rounded-0"
         type="button"
         @click="editCommentHandler"
@@ -94,7 +94,9 @@ const editCommentHandler = async () => {
     await patchComment({
       postId: props.postId,
       commentId: props.comment._id,
-      content: inputComment.value
+      payload: {
+        content: inputComment.value
+      }
     })
     isEditing.value = false
     emit('edit-comment', {
