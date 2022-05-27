@@ -36,7 +36,7 @@ watch(user, () => {
       if (user.value._id === data.postUserId && user.value._id !== data.user) {
         snackBars.value.push({
           value: '你有一則新留言喔',
-          to: { name: 'wall', query: { post: data.postId } },
+          to: { name: 'wall', query: { post: data.postId, comment: data._id } },
           ...data
         })
       } else if (
@@ -46,7 +46,7 @@ watch(user, () => {
       ) {
         snackBars.value.push({
           value: '你留言的文章有一則新留言喔',
-          to: { name: 'wall', query: { post: data.postId } },
+          to: { name: 'wall', query: { post: data.postId, comment: data._id } },
           ...data
         })
       }
