@@ -1,7 +1,7 @@
 <template>
   <div
     class="position-fixed"
-    style="bottom: 100px; right: 40px; z-index: 100"
+    style="bottom: 100px; right: 20px; z-index: 100"
   >
     <NotificationCard
       v-for="(snackBar, snackBarIndex) in snackBars"
@@ -57,7 +57,7 @@ watch(user, () => {
           snackBars.value.findIndex((item) => item._id === data._id),
           1
         )
-      }, 3000)
+      }, 2000)
     })
   }
 })
