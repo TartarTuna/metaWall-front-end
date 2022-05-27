@@ -14,7 +14,18 @@
         <!-- ---wall--- -->
         <empty-post-card v-if="loading">載入中...</empty-post-card>
         <template v-else>
-          <ul v-if="posts.length" class="ps-0">
+          <p
+            v-if="newPosts"
+            class="text-muted text-center"
+            style="cursor: pointer"
+            @click="resetPosts"
+          >
+            - 有新貼文喔！點擊載入 -
+          </p>
+          <ul
+            v-if="posts.length"
+            class="ps-0"
+          >
             <PostCard
               v-for="post in posts"
               :key="post._id"
@@ -41,26 +52,55 @@
 
 <script setup>
 import { ref } from 'vue'
+import { useRoute, onBeforeRouteUpdate, useRouter } from 'vue-router'
 import { getPosts } from '@/apis/post'
 import { user } from '@/compatibles/data'
 import PostFilter from '@/components/posts/filters/PostFilter.vue'
 import EmptyPostCard from '@/components/posts/cards/EmptyPostCard.vue'
 import PostCard from '@/components/posts/cards/PostCard.vue'
+import { io } from 'socket.io-client'
+const socket = io('http://localhost:3000') // 要記得改喔！後端網址
+const router = useRouter()
 
 const loading = ref(true)
 const sort = ref('desc')
 const keyword = ref('')
 const posts = ref([])
+const newPosts = ref(0)
+
+/**
+ * socket
+ */
+socket.on('connect', () => {
+  console.log(socket.id)
+})
+socket.on('newPost', (data) => {
+  // 有新增貼文時
+  if (data) {
+    newPosts.value++
+  }
+})
+
+let query = useRoute().query
+
+onBeforeRouteUpdate(async (to) => {
+  query = to.query
+  await setPosts({ reset: true })
+})
 
 /**
  * 取得貼文列表
  * @returns {promise}
  */
 const fetchPosts = async () => {
-  const { data } = await getPosts({
+  const params = {
     createdAt: sort.value,
     q: keyword.value
-  })
+  }
+  if (query && query.post) {
+    params._id = query.post
+  }
+  const { data } = await getPosts(params)
   return data
 }
 /**
@@ -162,6 +202,16 @@ const editPost = ({ postId, content, image, tag }) => {
 const deletePost = (postId) => {
   const index = posts.value.findIndex((item) => item._id === postId)
   if (~index) posts.value.splice(index, 1)
+}
+/**
+ * 重新載入貼文
+ */
+const resetPosts = () => {
+  newPosts.value = 0
+  router.push('/wall')
+  if (!Object.keys(query).length) {
+    setPosts({ reset: true })
+  }
 }
 
 setPosts()
