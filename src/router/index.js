@@ -49,7 +49,7 @@ const routes = [
   }
 ]
 const router = createRouter({
-  history: createWebHistory(),
+  history: createWebHistory(import.meta.env.VITE_PUBLISH_PATH),
   scrollBehavior() {
     return {
       top: 0

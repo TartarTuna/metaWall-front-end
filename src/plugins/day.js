@@ -18,6 +18,6 @@ export const dayFormat = (date, format = 'YYYY/MM/DD HH:mm') =>
 export const dayDiff = (date, format = 'YYYY-MM-DD') => {
   const oldDate = dayjs(date).format(format)
   const today = dayjs().format(format)
-  const diffDay = dayjs(oldDate).diff(today, 'day')
+  const diffDay = dayjs(today).diff(oldDate, 'day')
   return diffDay
 }
