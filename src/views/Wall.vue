@@ -59,7 +59,7 @@ import PostFilter from '@/components/posts/filters/PostFilter.vue'
 import EmptyPostCard from '@/components/posts/cards/EmptyPostCard.vue'
 import PostCard from '@/components/posts/cards/PostCard.vue'
 import { io } from 'socket.io-client'
-const socket = io('http://localhost:3000') // 要記得改喔！後端網址
+const socket = io('https://metawall-06.herokuapp.com') // 要記得改喔！後端網址
 const router = useRouter()
 
 const loading = ref(true)

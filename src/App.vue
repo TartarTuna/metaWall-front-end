@@ -28,7 +28,7 @@ const snackBars = ref([])
 
 watch(user, () => {
   if (user && user.value._id) {
-    const socket = io('http://localhost:3000')
+    const socket = io('https://metawall-06.herokuapp.com') // 要記得改喔！後端網址
     /**
      * socket
      */
