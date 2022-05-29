@@ -223,7 +223,7 @@ socket.on('chat message',(youMsg)=> {
 
 const takeImg = ref()
 onMounted(() => {
-    axios.get('https://metawall-06.herokuapp.com/addImg')
+    axios.get('https://metawall-06.herokuapp.com/chatImg')
     .then((res) => {
         console.log(res.data)
         const getImg = res.data.data
