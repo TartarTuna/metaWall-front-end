@@ -53,7 +53,11 @@
               </p>
             </div>
             <div class="d-md-flex justify-content-evenly d-grid gap-2 mt-3">
-              <button type="button" class="btn btn-info" @click="facebookLogin">
+              <button
+                type="button"
+                @click.prevent="facebookLogin"
+                class="btn btn-info"
+              >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="16"
@@ -68,7 +72,11 @@
                 </svg>
                 Facebook Login
               </button>
-              <button type="button" class="btn btn-danger" @click="googleLogin">
+              <button
+                type="button"
+                @click.prevent="googleLogin"
+                class="btn btn-danger"
+              >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="16"
@@ -98,7 +106,6 @@
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { signInApi } from '@/apis/user'
-import { facebookSignInApi, googleSignInApi } from '@/apis/auth'
 import { setCookieToke, clearUserInfo } from '@/compatibles/method'
 import Banner from '@/components/Banner.vue'
 
@@ -132,12 +139,12 @@ const loginSubmit = async () => {
   }
 }
 
-const facebookLogin = async () => {
-  await facebookSignInApi()
+const facebookLogin = () => {
+  window.open('https://metawall-06.herokuapp.com/auth/facebook', '_self')
 }
 
-const googleLogin = async () => {
-  await googleSignInApi()
+const googleLogin = () => {
+  window.open('https://metawall-06.herokuapp.com/auth/google', '_self')
 }
 
 clearUserInfo()
