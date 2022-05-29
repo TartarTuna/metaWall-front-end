@@ -1,1 +1,0 @@
-import{_ as e,o as s,a as n,b as o}from"./index.9ece9769.js";var a="/metaWall-front-end/assets/banner.dfd73088.png";const t={},c={class:"col-md-6 mr-9 d-md-block d-none align-self-center"},r=o("img",{src:a,alt:"signin",class:"img-fluid d-block m-auto"},null,-1),_=[r];function d(l,i){return s(),n("div",c,_)}var f=e(t,[["render",d]]);export{f as B};
