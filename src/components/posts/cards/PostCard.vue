@@ -154,6 +154,8 @@ const isMe = computed(() => {
   return user.value._id === post.value.user._id
 })
 
+console.log(post)
+
 /**
  * 按讚事件
  */
