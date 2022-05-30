@@ -61,7 +61,7 @@
                 </span>
               </div>
               <div class="col-9">
-                <p class="m-0 ms-xl-n3 fw-bold">我按讚的文章</p>
+                <p class="m-0 ms-xl-n3 fw-bold">我按讚的貼文</p>
               </div>
             </div>
           </router-link>
