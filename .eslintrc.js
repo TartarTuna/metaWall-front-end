@@ -11,6 +11,7 @@ module.exports = {
   },
   plugins: ['vue'],
   rules: {
+    'vue/no-v-for-template-key': 'off',
     'vue/multi-word-component-names': 'off',
     'vue/no-multiple-template-root': 'off'
   }

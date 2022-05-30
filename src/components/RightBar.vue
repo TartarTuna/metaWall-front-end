@@ -167,7 +167,7 @@
         </a>
         <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
           <div class="row row-cols-5 g-3 p-3">
-            <template v-for="item in takeImg">
+            <template v-for="item in takeImg" :key="item.id">
               <div class="col" @click="sendImg(item)">
                 <div class="card boder-0">
                   <img
@@ -212,9 +212,9 @@
 import { user } from '@/compatibles/data'
 import { correctImageUrl } from '@/compatibles/image-url'
 import { getUserProfile } from '@/apis/user'
+import { getChatImg } from '@/apis/ChatImg'
 
-import axios from 'axios'
-import { ref, onMounted, computed } from 'vue'
+import { ref, onMounted } from 'vue'
 import { io } from 'socket.io-client'
 
 const socket = io('https://metawall-06.herokuapp.com/')
@@ -236,7 +236,7 @@ const textMsg = ref('')
 const msgHeight = ref()
 
 const submit = () => {
-  if (textMsg.value == '') {
+  if (textMsg.value === '') {
     return
   }
   MsgTemp.value.push({
@@ -272,11 +272,10 @@ socket.on('chat message', (youMsg) => {
 
 const takeImg = ref()
 onMounted(() => {
-  axios
-    .get('https://metawall-06.herokuapp.com/chatImg')
+  getChatImg()
     .then((res) => {
       console.log(res.data)
-      const getImg = res.data.data
+      const getImg = res.data
       takeImg.value = getImg
     })
     .catch((error) => console.log(error))
