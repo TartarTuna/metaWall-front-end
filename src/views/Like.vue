@@ -98,7 +98,6 @@ const initData = async () => {
     isLoading.value = true
     const postData = await getLikes()
     likePosts.value = postData.data ?? []
-    console.log(likePosts.value)
   } finally {
     isLoading.value = false
   }
@@ -119,9 +118,9 @@ const getLikes = async () => {
 /**
  * 移除按讚貼文
  */
-const unLike = (id) => {
+const unLike = async (id) => {
   try {
-    patchUnlike(id)
+    await patchUnlike(id)
     initData()
   } catch (err) {
     alert('取消失敗')
