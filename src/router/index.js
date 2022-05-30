@@ -36,6 +36,12 @@ const routes = [
     component: () => import('@/views/Like.vue')
   },
   {
+    path: '/singlePost/:userId/:postId',
+    name: 'singlePost',
+    component: () => import('@/views/SinglePost.vue'),
+    props: true
+  },
+  {
     path: '/post',
     name: 'post',
     component: () => import('@/views/Post.vue'),
@@ -47,6 +53,11 @@ const routes = [
     component: () => import('@/views/Profile.vue'),
     beforeEnter: guard.beforeEnter.checkAuth
   }
+  // {
+  //   path: '/:pathMatch(.*)*',
+  //   name: 'NotFound',
+  //   component: () => import('@/pages/NotFound.vue')
+  // }
 ]
 const router = createRouter({
   history: createWebHistory(import.meta.env.VITE_PUBLISH_PATH),
