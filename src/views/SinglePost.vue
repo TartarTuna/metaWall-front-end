@@ -4,12 +4,11 @@
     <div class="row">
       <!-- ---left main--- -->
       <div class="col-lg-7">
-        <empty-post-card v-if="isLoading">載入中...</empty-post-card>
+        <empty-post-card v-if="!singlePost">載入中...</empty-post-card>
         <template v-else>
-          <ul class="ps-0">
+          <ul v-if="singlePost" class="ps-0">
             <PostCard
-              v-if="posts"
-              :post="posts"
+              :post="singlePost"
               @post-like="postLike"
               @delete-like="deleteLike"
               @post-comment="postComment"
@@ -51,7 +50,7 @@ const props = defineProps({
   }
 })
 
-const isLoading = ref(false)
+const singlePost = ref(null)
 const posts = ref(null)
 
 /**
@@ -61,7 +60,6 @@ const posts = ref(null)
  */
 const getUserPosts = async (userId) => {
   const { data } = await getSpecificUserPosts(userId)
-  console.log(data)
   return data
 }
 
@@ -69,8 +67,8 @@ const setSinglePostData = async () => {
   if (props) {
     const userPosts = await getUserPosts(props.userId)
     const data = userPosts.filter((item) => item._id === props.postId)
-    posts.value = data[0]
-    console.log(posts.value)
+    singlePost.value = data[0]
+    posts.value = data
   }
 }
 
