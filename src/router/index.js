@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import { setCookieToke } from '../compatibles/method.js'
 import guard from './navigation-guard'
 
 const routes = [
@@ -36,6 +37,12 @@ const routes = [
     component: () => import('@/views/Like.vue')
   },
   {
+    path: '/singlePost/:userId/:postId',
+    name: 'singlePost',
+    component: () => import('@/views/SinglePost.vue'),
+    props: true
+  },
+  {
     path: '/post',
     name: 'post',
     component: () => import('@/views/Post.vue'),
@@ -47,6 +54,11 @@ const routes = [
     component: () => import('@/views/Profile.vue'),
     beforeEnter: guard.beforeEnter.checkAuth
   }
+  // {
+  //   path: '/:pathMatch(.*)*',
+  //   name: 'NotFound',
+  //   component: () => import('@/pages/NotFound.vue')
+  // }
 ]
 const router = createRouter({
   history: createWebHistory(import.meta.env.VITE_PUBLISH_PATH),
@@ -57,6 +69,17 @@ const router = createRouter({
   },
   //   linkActiveClass: 'a-active',
   routes
+})
+
+// 處理第三方轉址情況，先陽春寫法測試
+router.beforeEach((to, from, next) => {
+  const { query } = to
+  if (query.token) {
+    const token = query.token
+    setCookieToke(token)
+    return next({ name: 'wall' })
+  }
+  next()
 })
 export default router
 
