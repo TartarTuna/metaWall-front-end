@@ -212,7 +212,8 @@
 import { user } from '@/compatibles/data'
 import { correctImageUrl } from '@/compatibles/image-url'
 import { getUserProfile } from '@/apis/user'
-import { getChatImg } from '@/apis/ChatImg'
+import { getChatImg } from '@/apis/chatImg'
+
 
 import { ref, onMounted } from 'vue'
 import { io } from 'socket.io-client'
