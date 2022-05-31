@@ -73,6 +73,11 @@ import { io } from 'socket.io-client'
 const socket = io('https://metawall-06.herokuapp.com') // 要記得改喔！後端網址
 const router = useRouter()
 
+/**
+ * 預設一頁幾筆貼文
+ */
+const PAGE_SIZE = 10
+
 const loading = ref(true)
 const sort = ref('desc')
 const keyword = ref('')
@@ -111,14 +116,18 @@ useInfiniteScroll(window, () => {
 /**
  * 最後頁數更新，立馬取下一頁資料
  */
-watch(lastPageIndex, async (lastIndex) => {
+const watchStop = watch(lastPageIndex, async (lastIndex) => {
   atTheBottom.value = true
   const { data } = await getPosts({
     createdAt: sort.value,
     q: keyword.value,
     pageIndex: lastIndex,
-    pageSize: 10
+    pageSize: PAGE_SIZE
   })
+  // 資料已到最後一頁的情況
+  if (data.length < PAGE_SIZE) {
+    watchStop()
+  }
   posts.value.push(...data)
   atTheBottom.value = false
 })
