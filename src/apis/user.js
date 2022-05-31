@@ -21,6 +21,13 @@ export const signUpApi = (payload) => axios.post('/sign_up', payload)
 export const getUserProfile = () => axios.get('/users/me')
 
 /**
+ * 取得特定會員資訊
+ * @param {string} userId 會員編號
+ * @returns {promise}
+ */
+export const getSpecificUserProfile = (userId) => axios.get(`/users/${userId}`)
+
+/**
  * 更新會員資訊
  * @param {object} payload 會員資訊
  * @returns {promise}

@@ -11,16 +11,18 @@
           <div v-else class="row g-0 px-4">
             <div class="col-2 col-lg-1 align-self-center">
               <img
-                src="@/assets/img/user6.png"
+                :src="correctImageUrl(specificUser.photo)"
                 class="img-fluid rounded-start d-block m-auto"
                 alt="user6"
               />
             </div>
             <div class="col-10 col-lg-11 d-flex justify-content-between">
               <div class="card-body">
-                <h5 class="card-title fw-bold">阿爾敏</h5>
+                <h5 class="card-title fw-bold">{{ specificUser.name }}</h5>
                 <p class="card-text">
-                  <small class="text-muted">987,987 人追蹤</small>
+                  <small class="text-muted"
+                    >{{ specificUser.trackNum }} 人追蹤</small
+                  >
                 </p>
               </div>
               <button
@@ -75,6 +77,9 @@ import PostFilter from '@/components/posts/filters/PostFilter.vue'
 import PostCard from '@/components/posts/cards/PostCard.vue'
 import EmptyPostCard from '@/components/posts/cards/EmptyPostCard.vue'
 import { user as me } from '@/compatibles/data'
+import { specificUser } from '@/compatibles/personal/data'
+import { correctImageUrl } from '@/compatibles/image-url'
+import { getSpecificUserProfile } from '@/apis/user'
 import { getSpecificUserPosts } from '@/apis/post'
 import { getTracks, postTrack, deleteTrack } from '@/apis/track'
 
@@ -84,7 +89,6 @@ const sort = ref('desc')
 const keyword = ref('')
 const tracks = ref([])
 const posts = ref([])
-const user = ref({})
 const props = defineProps({
   userId: {
     type: String,
@@ -126,6 +130,14 @@ const initData = async (userId) => {
   }
 }
 /**
+ * 設置特定會員資訊
+ * @param {string} userId 會員編號
+ */
+const setSpecificUser = async (userId) => {
+  const { data } = await getSpecificUserProfile(userId)
+  specificUser.value = data
+}
+/**
  * 取得個人的貼文
  * @param {string} userId 會員編號
  * @returns {promise}
@@ -163,11 +175,11 @@ const trackHandler = () => {
 
       const index = tracks.value.findIndex((item) => item._id === props.userId)
       tracks.value.splice(index, 1)
-      user.value.tracking--
+      specificUser.value.trackNum--
     } else {
       postTrack(props.userId)
-      tracks.value.push(user.value)
-      user.value.tracking++
+      tracks.value.push(specificUser.value)
+      specificUser.value.trackNum++
     }
   } catch (e) {
     alert(e.message)
@@ -263,15 +275,10 @@ onBeforeRouteUpdate((to, from) => {
     params: { userId }
   } = to
   if (props.userId !== userId) {
-    user.value = {
-      _id: userId
-    }
+    setSpecificUser(userId)
     initData(userId)
   }
 })
 
-user.value = {
-  _id: props.userId
-}
 initData(props.userId)
 </script>
