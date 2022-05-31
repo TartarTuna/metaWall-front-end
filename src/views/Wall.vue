@@ -22,10 +22,7 @@
           >
             - 有新貼文喔！點擊載入 -
           </p>
-          <ul
-            v-if="posts.length"
-            class="ps-0"
-          >
+          <ul v-if="posts.length" class="ps-0">
             <PostCard
               v-for="post in posts"
               :key="post._id"
@@ -38,6 +35,19 @@
               @edit-post="editPost"
               @delete-post="deletePost"
             />
+            <li
+              v-if="atTheBottom"
+              class="card py-4 px-4 mb-3 border-2 shadow-pushcard border8px position-relative text-center h-100"
+            >
+              <div>
+                <span
+                  class="spinner-border"
+                  role="status"
+                  aria-hidden="true"
+                ></span>
+              </div>
+              <div class="pt-2">載入新的貼文中...</div>
+            </li>
           </ul>
           <EmptyPostCard v-else />
         </template>
@@ -51,13 +61,14 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 import { useRoute, onBeforeRouteUpdate, useRouter } from 'vue-router'
 import { getPosts } from '@/apis/post'
 import { user } from '@/compatibles/data'
 import PostFilter from '@/components/posts/filters/PostFilter.vue'
 import EmptyPostCard from '@/components/posts/cards/EmptyPostCard.vue'
 import PostCard from '@/components/posts/cards/PostCard.vue'
+import { useInfiniteScroll } from '@vueuse/core'
 import { io } from 'socket.io-client'
 const socket = io('https://metawall-06.herokuapp.com') // 要記得改喔！後端網址
 const router = useRouter()
@@ -67,6 +78,8 @@ const sort = ref('desc')
 const keyword = ref('')
 const posts = ref([])
 const newPosts = ref(0)
+const lastPageIndex = ref(1)
+const atTheBottom = ref(false)
 
 /**
  * socket
@@ -86,6 +99,28 @@ let query = useRoute().query
 onBeforeRouteUpdate(async (to) => {
   query = to.query
   await setPosts({ reset: true })
+})
+
+/**
+ * 滾動到最底下，最後頁數就+1
+ */
+useInfiniteScroll(window, () => {
+  lastPageIndex.value++
+})
+
+/**
+ * 最後頁數更新，立馬取下一頁資料
+ */
+watch(lastPageIndex, async (lastIndex) => {
+  atTheBottom.value = true
+  const { data } = await getPosts({
+    createdAt: sort.value,
+    q: keyword.value,
+    pageIndex: lastIndex,
+    pageSize: 10
+  })
+  posts.value.push(...data)
+  atTheBottom.value = false
 })
 
 /**
