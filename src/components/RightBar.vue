@@ -77,11 +77,11 @@
         <div class="col-12 bg-white">
           <div class="row border bg-white position-relative">
             <ul
-              ref="msgHeight"
+              ref="talkListElem"
               class="col-12 bar border-primary d-flex flex-column position-relative"
               style="overflow-y: auto; max-height: 230px; min-height: 230px"
             >
-              <template v-for="item in MsgTemp" :key="item.id">
+              <template v-for="item in talkMessages" :key="item.id">
                 <template v-if="item.type === 'me' && item.img === ''">
                   <li
                     class="d-flex justify-content-end pt-4 pb-3 position-relative"
@@ -167,17 +167,20 @@
         </a>
         <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
           <div class="row row-cols-5 g-3 p-3">
-            <template v-for="item in takeImg" :key="item.id">
-              <div class="col" @click="sendImg(item)">
-                <div class="card boder-0">
-                  <img
-                    :src="item.img"
-                    class="card-img-top d-block m-auto"
-                    alt=""
-                  />
-                </div>
+            <div
+              v-for="item in talkImages"
+              :key="item.id"
+              class="col"
+              @click="sendImg(item)"
+            >
+              <div class="card boder-0">
+                <img
+                  :src="item.img"
+                  class="card-img-top d-block m-auto"
+                  alt=""
+                />
               </div>
-            </template>
+            </div>
           </div>
         </div>
       </div>
@@ -209,107 +212,86 @@
 </template>
 
 <script setup>
+import { ref, nextTick } from 'vue'
+import { io } from 'socket.io-client'
+import { getChatImg } from '@/apis/chatImg'
 import { user } from '@/compatibles/data'
 import { correctImageUrl } from '@/compatibles/image-url'
-import { getUserProfile } from '@/apis/user'
-import { getChatImg } from '@/apis/chatImg'
 
-
-import { ref, onMounted } from 'vue'
-import { io } from 'socket.io-client'
-
-const socket = io('https://metawall-06.herokuapp.com/')
-
-onMounted(() => {
-  getUserProfile()
-    .then((res) => {
-      userName.value = res.data.name
-      userPhoto.value = res.data.photo
-    })
-    .catch((error) => console.log(error))
-})
-
-const MsgTemp = ref([])
-const userName = ref('')
-const userPhoto = ref()
+const socket = io(import.meta.env.VITE_API_URL)
 const textMsg = ref('')
+const talkMessages = ref([])
+const talkImages = ref([])
+const talkListElem = ref(null)
 
-const msgHeight = ref()
-
+/**
+ * 設置聊天室的圖片
+ */
+const setTalkImages = async () => {
+  const { data } = await getChatImg()
+  talkImages.value = data
+}
+/**
+ * 滾動聊天室至最下方
+ */
+const scrollTalkToBottom = async () => {
+  await nextTick()
+  talkListElem.value.scroll({
+    top: talkListElem.value.scrollHeight,
+    behavior: 'smooth'
+  })
+}
+/**
+ * 送出聊天室的文字訊息
+ */
 const submit = () => {
   if (textMsg.value === '') {
     return
   }
-  MsgTemp.value.push({
-    userName: userName.value,
-    userPhoto: userPhoto.value,
+  const message = {
+    userName: user.value.name,
+    userPhoto: user.value.photo,
     userMsg: textMsg.value,
-    type: 'me',
     img: ''
-  })
-  socket.emit('chat message', MsgTemp.value)
+  }
+  talkMessages.value.push({ ...message, type: 'me' })
+  socket.emit('chat message', [{ ...message, type: 'you' }])
   textMsg.value = ''
-  setTimeout(() => {
-    msgHeight.value.scrollTop = msgHeight.value.scrollHeight
-  }, '50')
+  scrollTalkToBottom()
 }
-
-socket.on('chat message', (youMsg) => {
-  MsgTemp.value = []
-  const addMsg = youMsg
-  addMsg.forEach((item) => {
-    MsgTemp.value.push({
-      userName: item.userName,
-      userPhoto: item.userPhoto,
-      userMsg: item.userMsg,
-      type: 'you',
-      img: item.img
-    })
-  })
-  setTimeout(() => {
-    msgHeight.value.scrollTop = msgHeight.value.scrollHeight
-  }, '50')
-})
-
-const takeImg = ref()
-onMounted(() => {
-  getChatImg()
-    .then((res) => {
-      console.log(res.data)
-      const getImg = res.data
-      takeImg.value = getImg
-    })
-    .catch((error) => console.log(error))
-})
-
+/**
+ * 送出聊天室的圖片事建
+ * @param {object} item 訊息資訊
+ */
 const sendImg = (item) => {
-  MsgTemp.value.push({
-    userName: userName.value,
-    userPhoto: userPhoto.value,
+  const message = {
+    userName: user.value.name,
+    userPhoto: user.value.photo,
     userMsg: item.userMsg,
-    type: 'me',
     img: item.img
-  })
-  socket.emit('imgSend', MsgTemp.value)
-  setTimeout(() => {
-    msgHeight.value.scrollTop = msgHeight.value.scrollHeight
-  }, '50')
-}
+  }
+  talkMessages.value.push({ ...message, type: 'me' })
+  socket.emit('imgSend', [{ ...message, type: 'you' }])
 
-socket.on('imgSend', (youImg) => {
-  MsgTemp.value = []
-  const addImg = youImg
-  addImg.forEach((item) => {
-    MsgTemp.value.push({
-      userName: item.userName,
-      userPhoto: item.userPhoto,
-      userMsg: item.userMsg,
-      type: 'you',
-      img: item.img
-    })
-  })
-  setTimeout(() => {
-    msgHeight.value.scrollTop = msgHeight.value.scrollHeight
-  }, '50')
+  const image = new Image()
+  image.onload = () => {
+    scrollTalkToBottom()
+  }
+  image.src = item.img
+}
+socket.on('chat message', (messages = []) => {
+  talkMessages.value.push(...messages.map((item) => ({ ...item, type: 'you' })))
+  scrollTalkToBottom()
 })
+socket.on('imgSend', (messages = []) => {
+  talkMessages.value.push(...messages.map((item) => ({ ...item, type: 'you' })))
+
+  const image = new Image()
+  image.onload = () => {
+    scrollTalkToBottom()
+  }
+  image.src = [...messages].pop().img
+})
+
+setTalkImages()
 </script>
