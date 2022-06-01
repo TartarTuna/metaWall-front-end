@@ -57,7 +57,7 @@ watch(user, () => {
           snackBars.value.findIndex((item) => item._id === data._id),
           1
         )
-      }, 2000)
+      }, 3000)
     })
   }
 })
