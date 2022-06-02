@@ -26,7 +26,13 @@
                   alt="user2"
                 />
                 <div class="d-flex flex-column mt-2">
-                  <router-link to="personal" class="mb-0 fw-bold">
+                  <router-link
+                    :to="{
+                      name: 'personal',
+                      params: { userId: item.user._id }
+                    }"
+                    class="mb-0 fw-bold"
+                  >
                     {{ item.user.name }}
                   </router-link>
                   <small class="text-muted">
