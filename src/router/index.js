@@ -29,18 +29,21 @@ const routes = [
   {
     path: '/follow',
     name: 'follow',
-    component: () => import('@/views/Follow.vue')
+    component: () => import('@/views/Follow.vue'),
+    beforeEnter: guard.beforeEnter.checkAuth
   },
   {
     path: '/like',
     name: 'like',
-    component: () => import('@/views/Like.vue')
+    component: () => import('@/views/Like.vue'),
+    beforeEnter: guard.beforeEnter.checkAuth
   },
   {
     path: '/singlePost/:userId/:postId',
     name: 'singlePost',
     component: () => import('@/views/SinglePost.vue'),
-    props: true
+    props: true,
+    beforeEnter: guard.beforeEnter.checkUser
   },
   {
     path: '/post',

@@ -133,11 +133,9 @@ const deleteComment = ({ postId, commentId }) => {
  * @param {string} postId 貼文編號
  * @param {string} content 內容
  * @param {string} image 圖片
- * @param {array} tag 標籤
  */
-const editPost = ({ postId, content, image, tag }) => {
+const editPost = ({ postId, content, image }) => {
   singlePost.value.content = content
-  singlePost.value.tag = tag
   singlePost.value.image = image
 }
 /**

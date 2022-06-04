@@ -83,18 +83,18 @@ import { getSpecificUserProfile } from '@/apis/user'
 import { getSpecificUserPosts } from '@/apis/post'
 import { getTracks, postTrack, deleteTrack } from '@/apis/track'
 
-const userLoading = ref(false)
-const postLoading = ref(false)
-const sort = ref('desc')
-const keyword = ref('')
-const tracks = ref([])
-const posts = ref([])
 const props = defineProps({
   userId: {
     type: String,
     required: true
   }
 })
+const userLoading = ref(false)
+const postLoading = ref(false)
+const sort = ref('desc')
+const keyword = ref('')
+const tracks = ref([])
+const posts = ref([])
 
 /**
  * 是否為自己
@@ -237,12 +237,10 @@ const deleteComment = ({ postId, commentId }) => {
  * @param {string} postId 貼文編號
  * @param {string} content 內容
  * @param {string} image 圖片
- * @param {array} tag 標籤
  */
-const editPost = ({ postId, content, image, tag }) => {
+const editPost = ({ postId, content, image }) => {
   const post = posts.value.find((item) => item._id === postId)
   post.content = content
-  post.tag = tag
   post.image = image
 }
 /**

@@ -20,13 +20,21 @@
           v-if="isMe"
           src="@/assets/img/edit.png"
           class="d-block m-auto mx-2"
+          style="cursor: pointer"
           @click="isEditing = !isEditing"
         />
-        <img src="@/assets/img/share.png" class="d-block m-auto mx-2" alt="" />
+        <img
+          src="@/assets/img/share.png"
+          class="d-block m-auto mx-2"
+          alt="share"
+          style="cursor: pointer"
+          @click="sharePostHandler()"
+        />
         <img
           v-if="isMe"
           src="@/assets/img/trash.png"
           class="d-block m-auto mx-2"
+          style="cursor: pointer"
           @click="deletePostHandler"
         />
       </div>
@@ -120,7 +128,8 @@
 </template>
 
 <script setup>
-import { ref, toRefs, computed } from 'vue'
+import { ref, toRefs, computed, watch } from 'vue'
+import { useClipboard } from '@vueuse/core'
 import { user } from '@/compatibles/data'
 import { correctImageUrl } from '@/compatibles/image-url'
 import { patchLike, patchUnlike } from '@/apis/like'
@@ -136,11 +145,6 @@ const props = defineProps({
     required: true
   }
 })
-
-const loading = ref(false)
-const isEditing = ref(false)
-const comment = ref('')
-const { post } = toRefs(props)
 const emit = defineEmits([
   'post-like',
   'delete-like',
@@ -150,8 +154,27 @@ const emit = defineEmits([
   'edit-post',
   'delete-post'
 ])
+
+const loading = ref(false)
+const isEditing = ref(false)
+const comment = ref('')
+const { post } = toRefs(props)
+const { copy: sharePostHandler, copied: shared } = useClipboard({
+  source: `${window.location.origin}/singlePost/${post.value.user._id}/${post.value._id}`
+})
+
+/**
+ * 是否為自己
+ * @returns {boolean}
+ */
 const isMe = computed(() => {
   return user.value._id === post.value.user._id
+})
+
+watch(shared, (value) => {
+  if (value) {
+    alert('已複製')
+  }
 })
 
 /**
