@@ -68,10 +68,11 @@ const props = defineProps({
     required: true
   }
 })
+const emit = defineEmits(['delete-comment', 'edit-comment'])
+
 const loading = ref(false)
 const isEditing = ref(false)
 const inputComment = ref('')
-const emit = defineEmits(['delete-comment', 'edit-comment'])
 
 /**
  * 刪除留言事件

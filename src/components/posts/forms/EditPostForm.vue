@@ -11,17 +11,6 @@
         placeholder="輸入您的貼文內容"
       ></textarea>
     </div>
-    <div class="form-group mb-3">
-      <label for="content fw-bold">修改tag</label>
-      <textarea
-        v-model="tag"
-        class="form-control border border-dark border-2"
-        type="text"
-        id="content"
-        rows="5"
-        placeholder="修改tag"
-      ></textarea>
-    </div>
     <div class="input-group mb-3">
       <input
         ref="inputFile"
@@ -38,7 +27,12 @@
         上傳圖片
       </label>
     </div>
-    <img v-if="image" :src="image" alt="photo1" class="w-100 img-fluid mb-2" />
+    <img
+      v-if="image"
+      :src="imageFile ? image : correctImageUrl(image)"
+      alt="photo1"
+      class="w-100 img-fluid mb-2"
+    />
     <div v-if="error" class="my-0 text-center fs-7 text-danger">
       {{ error }}
     </div>
@@ -60,6 +54,7 @@
 import { ref } from 'vue'
 import { postImage } from '@/apis/image'
 import { patchPost } from '@/apis/post'
+import { correctImageUrl } from '@/compatibles/image-url'
 
 const props = defineProps({
   post: {
@@ -67,18 +62,17 @@ const props = defineProps({
     required: true
   }
 })
+const emit = defineEmits(['edit-post'])
+
 const loading = ref(false)
 const content = ref('')
 const image = ref('')
 const error = ref('')
-const tag = ref([])
 const imageFile = ref(null)
 const inputFile = ref(null)
-const emit = defineEmits(['edit-post'])
 
 content.value = props.post.content
 image.value = props.post.image
-tag.value = [...props.post.tag]
 
 /**
  * 變更貼文圖片事件
@@ -132,8 +126,7 @@ const submitHandler = async () => {
     alert('更新成功')
     emit('edit-post', {
       content: data.content,
-      image: data.image,
-      tag: data.tag
+      image: link || data.image
     })
     error.value = ''
     inputFile.value.value = ''

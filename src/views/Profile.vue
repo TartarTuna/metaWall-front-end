@@ -46,7 +46,11 @@
                   <form class="row px-lg-5 g-3" @submit.prevent>
                     <div>
                       <img
-                        :src="nicknameForm.photo"
+                        :src="
+                          nicknameForm.photoFile
+                            ? nicknameForm.photo
+                            : correctImageUrl(nicknameForm.photo)
+                        "
                         alt="user"
                         class="img-fluid w-25 mx-auto mb-4 d-block"
                       />
@@ -182,9 +186,10 @@
 
 <script setup>
 import { ref } from 'vue'
-import { user } from '@/compatibles/data'
 import { patchUserProfile, patchUserPassword } from '@/apis/user'
 import { postImage } from '@/apis/image'
+import { user } from '@/compatibles/data'
+import { correctImageUrl } from '@/compatibles/image-url'
 
 const loading = ref(false)
 const tab = ref('name-edit')
@@ -220,6 +225,8 @@ nicknameForm.value.gender = user.value.gender
  */
 const changePhotoHandler = (e) => {
   const file = e.target.files.item(0)
+  if (!file) return
+
   nicknameError.value = ''
   if (!['image/jpeg', 'image/png'].includes(file.type)) {
     nicknameError.value = '檔案格式錯誤，僅限上傳 jpg、jpeg 與 png 格式'
@@ -266,7 +273,10 @@ const submitProfileHandler = async () => {
 
     await patchUserProfile(payload)
     alert('更新成功')
-    if (link) user.value.photo = link
+    if (link) {
+      user.value.photo = link
+      nicknameForm.value.photo = link
+    }
     user.value.name = name
     user.value.gender = gender
     nicknameError.value = ''
