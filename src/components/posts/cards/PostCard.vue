@@ -160,7 +160,9 @@ const isEditing = ref(false)
 const comment = ref('')
 const { post } = toRefs(props)
 const { copy: sharePostHandler, copied: shared } = useClipboard({
-  source: `${window.location.origin}/singlePost/${post.value.user._id}/${post.value._id}`
+  source: `${window.location.origin}${
+    import.meta.env.VITE_PUBLISH_PATH
+  }singlePost/${post.value.user._id}/${post.value._id}`
 })
 
 /**
