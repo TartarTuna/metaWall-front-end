@@ -41,7 +41,9 @@
     </div>
     <EditPostForm v-if="isEditing" :post="post" @edit-post="editPost" />
     <template v-else>
-      <p class="fw-bold">{{ post.content }}</p>
+      <p class="fw-bold" style="white-space: pre-wrap">
+        {{ post.content }}
+      </p>
       <!-- ---tag--- -->
       <div v-if="post.tag.length" class="card-footer border-0 bg-white d-flex">
         <div v-for="item in post.tag" :key="item" class="mx-2 text-primary">
