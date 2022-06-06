@@ -11,6 +11,13 @@
         <div v-if="isLoading" class="text-center" style="line-height: 88px">
           載入中...
         </div>
+        <p
+          v-else-if="!tracks.length && !isLoading"
+          class="text-center"
+          style="line-height: 88px"
+        >
+          尚無追蹤使用者
+        </p>
         <ul v-else class="ps-0">
           <li
             v-for="(item, index) in tracks"
