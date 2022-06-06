@@ -85,12 +85,3 @@ router.beforeEach((to, from, next) => {
   next()
 })
 export default router
-
-// 子畫面懶人包，有需要可以這邊直接複製XD
-// children: [
-//   {
-//     path: '',
-//     name: 'Wall',
-//     component: () => import('@/components/navbar.vue'),
-//   },
-// ],
