@@ -88,6 +88,7 @@
                   >
                     <div
                       class="p-2 m-2 rounded-3 textBg textRight position-relative"
+                      style="white-space: pre-wrap"
                     >
                       {{ item.userMsg }}
                     </div>
@@ -105,6 +106,7 @@
                       <span>{{ item.userName }}:</span>
                       <div
                         class="p-2 m-2 rounded-3 textBg textLeft position-relative"
+                        style="white-space: pre-wrap"
                       >
                         {{ item.userMsg }}
                       </div>
