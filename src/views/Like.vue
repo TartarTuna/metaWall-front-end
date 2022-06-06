@@ -11,6 +11,13 @@
         <div v-if="isLoading" class="text-center" style="line-height: 88px">
           載入中...
         </div>
+        <p
+          v-else-if="!likePosts.length && !isLoading"
+          class="text-center"
+          style="line-height: 88px"
+        >
+          尚無按讚的貼文
+        </p>
         <ul v-else class="ps-0">
           <li
             v-for="(item, index) in likePosts"
@@ -104,6 +111,7 @@ const initData = async () => {
     isLoading.value = true
     const postData = await getLikes()
     likePosts.value = postData.data ?? []
+    console.log(likePosts.value)
   } finally {
     isLoading.value = false
   }
