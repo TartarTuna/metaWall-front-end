@@ -111,7 +111,6 @@ const initData = async () => {
     isLoading.value = true
     const postData = await getLikes()
     likePosts.value = postData.data ?? []
-    console.log(likePosts.value)
   } finally {
     isLoading.value = false
   }
