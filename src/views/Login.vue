@@ -107,6 +107,7 @@ import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { signInApi } from '@/apis/user'
 import { setCookieToke, clearUserInfo } from '@/compatibles/method'
+import { errorFromUrl } from '@/compatibles/data'
 import Banner from '@/components/Banner.vue'
 
 const router = useRouter()
@@ -114,6 +115,11 @@ const loading = ref(false)
 const email = ref('')
 const password = ref('')
 const errorMsg = ref('')
+
+if (errorFromUrl.value) {
+  errorMsg.value = errorFromUrl.value
+  errorFromUrl.value = ''
+}
 
 const loginSubmit = async () => {
   if (!email.value || !password.value) {

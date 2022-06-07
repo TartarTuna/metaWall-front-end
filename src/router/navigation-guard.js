@@ -1,5 +1,5 @@
-import { getCookieToken } from '@/compatibles/method'
-import { user } from '@/compatibles/data'
+import { getCookieToken, setCookieToke } from '@/compatibles/method'
+import { user, errorFromUrl } from '@/compatibles/data'
 import { specificUser } from '@/compatibles/personal/data'
 import { getUserProfile, getSpecificUserProfile } from '@/apis/user'
 
@@ -32,9 +32,23 @@ const checkUser = async (to, from) => {
   }
 }
 
+const checkThirdParty = async (to, from) => {
+  const { query } = to
+  if (query.token) {
+    const token = query.token
+    setCookieToke(token)
+    return { name: 'wall' }
+  } else if (query.error) {
+    errorFromUrl.value = query.error
+    return { name: 'login' }
+  }
+  return true
+}
+
 export default {
   beforeEnter: {
     checkAuth,
-    checkUser
+    checkUser,
+    checkThirdParty
   }
 }

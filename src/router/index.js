@@ -1,5 +1,4 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import { setCookieToke } from '../compatibles/method.js'
 import guard from './navigation-guard'
 
 const routes = [
@@ -12,6 +11,10 @@ const routes = [
     path: '/register',
     name: 'register',
     component: () => import('@/views/Register.vue')
+  },
+  {
+    path: '/oauth',
+    beforeEnter: guard.beforeEnter.checkThirdParty
   },
   {
     path: '/wall',
@@ -74,16 +77,6 @@ const router = createRouter({
   routes
 })
 
-// 處理第三方轉址情況，先陽春寫法測試
-router.beforeEach((to, from, next) => {
-  const { query } = to
-  if (query.token) {
-    const token = query.token
-    setCookieToke(token)
-    return next({ name: 'wall' })
-  }
-  next()
-})
 export default router
 
 // 子畫面懶人包，有需要可以這邊直接複製XD
