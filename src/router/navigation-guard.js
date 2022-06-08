@@ -37,7 +37,7 @@ const checkThirdParty = (to) => {
   if (query.token) {
     const token = query.token
     setCookieToke(token)
-    return { name: 'wall' }
+    return { name: 'wall', query: {} }
   }
   if (query.error) {
     errorFromUrl.value = query.error
