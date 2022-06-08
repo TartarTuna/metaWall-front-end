@@ -1,0 +1,1 @@
+import{U as t}from"./index.19086f84.js";const p=s=>t.get("/posts",{params:s}),a=(s,o)=>t.get(`/posts/${s}/user`,{params:o}),c=s=>t.post("/posts",s),n=(s,o)=>t.patch(`/posts/${s}`,o),d=s=>t.delete(`/posts/${s}`);export{a,c as b,d,p as g,n as p};
