@@ -5,3 +5,4 @@ import { useCookies } from '@vueuse/integrations/useCookies'
 export const cookieToken = useCookies(['wallToken'])
 
 export const user = ref({})
+export const errorFromUrl = ref('')

@@ -128,7 +128,10 @@
             >
               <div class="card-body px-10 py-5">
                 <section class="row d-flex justify-content-center">
-                  <form class="row px-lg-5 g-3" @submit.prevent>
+                  <div v-if="IsThirdPartyLogin">
+                    第三方登入佔不提供修改密碼的功能 ~ 敬請見諒!!
+                  </div>
+                  <form v-else class="row px-lg-5 g-3" @submit.prevent>
                     <div class="col-12">
                       <label for="userpPassword" class="form-label fw-bold"
                         >新密碼</label
@@ -185,7 +188,7 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import { patchUserProfile, patchUserPassword } from '@/apis/user'
 import { postImage } from '@/apis/image'
 import { user } from '@/compatibles/data'
@@ -214,6 +217,9 @@ const passwordForm = ref({
   confirmPassword: ''
 })
 const inputFile = ref(null)
+const IsThirdPartyLogin = computed(
+  () => user.value.googleId || user.value.facebookId
+)
 
 nicknameForm.value.photo = user.value.photo
 nicknameForm.value.name = user.value.name
