@@ -13,10 +13,6 @@ const routes = [
     component: () => import('@/views/Register.vue')
   },
   {
-    path: '/oauth',
-    beforeEnter: guard.beforeEnter.checkThirdParty
-  },
-  {
     path: '/wall',
     name: 'wall',
     component: () => import('@/views/Wall.vue'),
@@ -59,6 +55,10 @@ const routes = [
     name: 'profile',
     component: () => import('@/views/Profile.vue'),
     beforeEnter: guard.beforeEnter.checkAuth
+  },
+  {
+    path: '/oauth',
+    redirect: guard.beforeEnter.checkThirdParty
   }
   // {
   //   path: '/:pathMatch(.*)*',
@@ -66,6 +66,7 @@ const routes = [
   //   component: () => import('@/pages/NotFound.vue')
   // }
 ]
+
 const router = createRouter({
   history: createWebHistory(import.meta.env.VITE_PUBLISH_PATH),
   scrollBehavior() {

@@ -32,17 +32,18 @@ const checkUser = async (to, from) => {
   }
 }
 
-const checkThirdParty = async (to, from) => {
+const checkThirdParty = (to) => {
   const { query } = to
   if (query.token) {
     const token = query.token
     setCookieToke(token)
     return { name: 'wall' }
-  } else if (query.error) {
-    errorFromUrl.value = query.error
-    return { name: 'login' }
   }
-  return true
+  if (query.error) {
+    errorFromUrl.value = query.error
+    return { name: 'login', query: {} }
+  }
+  return { name: to.name }
 }
 
 export default {
