@@ -96,7 +96,7 @@
                 </template>
                 <template v-else-if="item.type === 'you' && item.img === ''">
                   <li class="row d-flex justify-content-start pt-5 pb-3">
-                    <div class="col-3" style="width: 40px; height: 40px">
+                    <div class="col-3" style="width: 80px; height: 80px">
                       <img
                         :src="correctImageUrl(item.userPhoto)"
                         class="img-fluid"
@@ -127,7 +127,7 @@
                 </template>
                 <template v-else-if="item.img !== null && item.type === 'you'">
                   <li class="row d-flex justify-content-start pt-5 pb-3">
-                    <div class="col-3" style="width: 40px; height: 40px">
+                    <div class="col-3" style="width: 80px; height: 80px">
                       <img
                         :src="correctImageUrl(item.userPhoto)"
                         class="img-fluid"
